@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 
 import { Registr } from './components/Registr';
 import { Login } from './components/Login';
@@ -9,6 +9,9 @@ import { ToastContainer } from 'react-toastify';
 export const App = () => {
   return (
     <>
+      <Link to="/">Main</Link>
+      <Link to="/login">Login</Link>
+      <Link to="/registration">Registr</Link>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
