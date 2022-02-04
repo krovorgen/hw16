@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
-
-import { Registr } from './components/Registr';
-import { Login } from './components/Login';
-import { Main } from './components/Main';
 import { ToastContainer } from 'react-toastify';
-import { Error404 } from './components/Error404';
-import { PasswordRecovery } from './components/PasswordRecovery';
+
+import { Registr } from './pages/Registr';
+import { Login } from './pages/Login';
+import { Main } from './pages/Main';
+import { Error404 } from './pages/Error404';
+import { PasswordRecovery } from './pages/PasswordRecovery';
 
 export const App = () => {
   return (
