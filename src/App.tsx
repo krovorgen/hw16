@@ -6,6 +6,7 @@ import { Login } from './components/Login';
 import { Main } from './components/Main';
 import { ToastContainer } from 'react-toastify';
 import { Error404 } from './components/Error404';
+import { PasswordRecovery } from './components/PasswordRecovery';
 
 export const App = () => {
   return (
@@ -14,10 +15,12 @@ export const App = () => {
       <Link to="/login">Login</Link>
       <Link to="/registration">Registr</Link>
       <Link to="/404">Error404</Link>
+      <Link to="/password-recovery">PasswordRecovery</Link>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registr />} />
+        <Route path="/password-recovery" element={<PasswordRecovery />} />
         <Route path="/404" element={<Error404 />} />
       </Routes>
       <ToastContainer
