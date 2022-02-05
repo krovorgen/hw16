@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import { api } from '../../api';
+import { Loader } from '@alfalab/core-components/loader';
 
 import styles from './PingControl.module.scss';
 
 export const PingControl = () => {
-  const [ping, setPing] = useState(0);
+  const [ping, setPing] = useState(-1);
 
   useEffect(() => {
-    api.checkPing(Date.now()).then(({ data }) => setPing(+data.ping));
+    api.checkPing(Date.now()).then(({ data }) => setPing(data.ping));
   }, []);
   return (
     <p className={styles.root}>
@@ -21,7 +22,7 @@ export const PingControl = () => {
           [styles.high]: ping >= 67,
         })}
       >
-        {ping}
+        {ping === -1 ? <Loader className={styles.loader} /> : ping}
       </mark>
     </p>
   );
