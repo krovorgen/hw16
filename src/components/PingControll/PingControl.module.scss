@@ -1,2 +1,28 @@
 @import "./src/scss/variables";
 @import "./src/scss/mixins";
+
+.root {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  padding: 15px;
+  min-width: 150px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.ping {
+  font-size: 16px;
+}
+
+.low {
+  color: #50e3c2;
+}
+
+.medium {
+  color: #d5d500;
+}
+
+.high {
+  color: #f00;
+}
