@@ -7,6 +7,7 @@ import { Login } from './pages/Login';
 import { Main } from './pages/Main';
 import { Error404 } from './pages/Error404';
 import { PasswordRecovery } from './pages/PasswordRecovery';
+import { PingControl } from './components/PingControll';
 
 export const App = () => {
   return (
@@ -34,6 +35,7 @@ export const App = () => {
         draggable
         pauseOnHover
       />
+      <PingControl />
     </>
   );
 };

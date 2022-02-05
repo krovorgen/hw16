@@ -7,4 +7,8 @@ const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-export const api = {};
+export const api = {
+  checkPing(frontTime: number) {
+    return instance.post(`ping`, { frontTime });
+  },
+};
