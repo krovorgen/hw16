@@ -5,10 +5,14 @@ const BASE_URL =
 
 const instance = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 export const api = {
   checkPing(frontTime: number) {
     return instance.post(`ping`, { frontTime });
+  },
+  register(email: string, password: string) {
+    return instance.post(`auth/register`, { email, password });
   },
 };
