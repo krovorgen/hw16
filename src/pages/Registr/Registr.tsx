@@ -35,7 +35,7 @@ export const Registr = () => {
     }
   };
 
-  const inputsChangeHandler = (event: ChangeEvent<HTMLInputElement>, payload: { value: string }) => {
+  const inputsChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.currentTarget.name);
     console.log(event.currentTarget.value);
     switch (event.currentTarget.name) {
