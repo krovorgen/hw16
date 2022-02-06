@@ -1,2 +1,21 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
+
+.window {
+  @include flex-column;
+
+  position: absolute;
+  left: 35%;
+  top: 15%;
+  padding: 33px;
+  width: 413px;
+  height: 540px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #f9f9fe;
+
+  .input {
+    width: 100%;
+  }
+}
