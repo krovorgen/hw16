@@ -24,8 +24,8 @@ export const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registr />} />
         <Route path="/password-recovery" element={<PasswordRecovery />} />
-        <Route path="/404" element={<Error404 />} />
-        <Route path="/set-new-password" element={<SetNewPassword />} />
+        <Route path="*" element={<Error404 />} />
+        <Route path="/set-new-password/:token" element={<SetNewPassword />} />
       </Routes>
       <ToastContainer
         position="bottom-left"

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
+import { useParams } from 'react-router-dom';
 
 import { Typography } from '@alfalab/core-components/typography';
 import { PasswordInput } from '@alfalab/core-components/password-input';
@@ -8,7 +9,8 @@ import { Button } from '@alfalab/core-components/button';
 import styles from '../PasswordRecovery/PasswordRecovery.module.scss';
 
 export const SetNewPassword = () => {
-  const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const { token } = useParams();
+  const [passwordVisible, setPasswordVisible] = useState(false);
   return (
     <div className={cn('container', styles.root)}>
       <div className={styles.wrap}>
