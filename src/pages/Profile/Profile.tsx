@@ -69,7 +69,7 @@ export const Profile = () => {
             autoFocus
           />
         ) : (
-          <span>Name : {profileName}</span>
+          <span> Name : {profileName}</span>
         )}
       </div>
       <div>Email: {profileEmail}</div>
