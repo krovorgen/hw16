@@ -4,49 +4,74 @@ import cn from 'classnames';
 import { Input } from '@alfalab/core-components/input';
 import { PasswordInput } from '@alfalab/core-components/password-input';
 import { Typography } from '@alfalab/core-components/typography';
-import { Button } from '@alfalab/core-components/button';
-import { Row } from '@alfalab/core-components/grid/row';
-import { Col } from '@alfalab/core-components/grid/col';
+import { Notification } from '@alfalab/core-components/notification';
 
 import styles from './Registr.module.scss';
 import { api } from '../../api';
 
 export const Registr = () => {
-  const [passwordsVisible, setPasswordsVisible] = React.useState({
-    password: false,
-    confirmPassword: false,
-  });
-  const [inputsData, setInputsData] = React.useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  //Passwords visibility conditions
+  const [passVisible, setPassVisible] = React.useState(false);
+  const [confPassVisible, setConfPassVisible] = React.useState(false);
+  //Email input field value
+  const [email, setEmail] = React.useState('');
+  //Password input field value
+  const [password, setPassword] = React.useState('');
+  //Confirm Password input field value
+  const [confirmPassword, SetConfirmPassword] = React.useState('');
+  const [isVisible, setIsVisible] = React.useState(false);
+  const toggleVisiblity = React.useCallback(() => setIsVisible((prev) => !prev), []);
+  const hideNotification = React.useCallback(() => setIsVisible(false), []);
 
+  //Toggle passwords visibility
   const visibilityHandler = (visible: boolean, name: 'password' | 'confirmPassword') => {
     switch (name) {
       case 'password':
-        setPasswordsVisible({ ...passwordsVisible, password: visible });
+        setPassVisible(visible);
         break;
       case 'confirmPassword':
-        setPasswordsVisible({ ...passwordsVisible, confirmPassword: visible });
+        setConfPassVisible(visible);
         break;
       default:
         break;
     }
   };
 
+  //Password and Confirm Password match checking
+  const passCheck = () => {
+    return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
+  };
+
+  //Returns notification message
+  const getErrorMsg = () => {
+    if (email.length === 0 && password.length === 0 && confirmPassword.length === 0) {
+      return 'Пользовательские данные не заполнены!';
+    }
+    if (email.length === 0 && passCheck()) {
+      return 'Поле e-mail не заполнено!';
+    }
+    if (email.length === 0 && !passCheck()) {
+      return 'Поле e-mail не заполнено, пароль и подтверждающий пароль не совпадают!';
+    }
+    if (email.length > 0 && password.length === 0 && confirmPassword.length === 0) {
+      return 'Поля ввода пароля и подтверждающего пароля не заполнены!';
+    }
+    if (email.length > 0 && !passCheck()) {
+      return 'Пароль и подтверждающий пароль не совпадают!';
+    }
+  };
+
+  //Change input value for fields: email, password, confirm password
   const inputsChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.name);
-    console.log(event.currentTarget.value);
     switch (event.currentTarget.name) {
       case 'email':
-        setInputsData({ ...inputsData, email: event.currentTarget.value });
+        setEmail(event.currentTarget.value);
         break;
       case 'password':
-        setInputsData({ ...inputsData, password: event.currentTarget.value });
+        setPassword(event.currentTarget.value);
         break;
       case 'confirmPassword':
-        setInputsData({ ...inputsData, confirmPassword: event.currentTarget.value });
+        SetConfirmPassword(event.currentTarget.value);
         break;
       default:
         break;
@@ -54,66 +79,83 @@ export const Registr = () => {
   };
 
   const registerHandler = () => {
-    api.register(inputsData.email, inputsData.password).then((data) => console.log(data.data));
+    api.register(email, password).then((data) => console.log(data.data));
   };
 
-  const test = () => {
-    return (
-      <div className={styles.window}>
-        <div>
-          <Typography.Title tag={'h1'}>It-incubator</Typography.Title>
-          <Typography.Title tag={'h2'}>Sign Up</Typography.Title>
+  return (
+    <div className={cn('container', styles.root)}>
+      <div className={styles.modalWindow}>
+        <div className={styles.titlesBlock}>
+          <Typography.Title tag={'h1'} className={styles.title}>
+            It-incubator
+          </Typography.Title>
+          <Typography.Title tag={'h2'} className={styles.subtitle}>
+            Sign Up
+          </Typography.Title>
         </div>
-        <div>
+        <div className={styles.inputsBlock}>
           <div>Email:</div>
-          <Input
-            name="email"
-            value={inputsData.email}
-            onChange={inputsChangeHandler}
-            type={'email'}
-            className={styles.input}
-          />
-          <br />
+          <Input name="email" value={email} onChange={inputsChangeHandler} type={'email'} className={styles.input} />
           {/*password input field*/}
           <div>Password:</div>
           <PasswordInput
-            passwordVisible={passwordsVisible.password}
+            passwordVisible={passVisible}
             onPasswordVisibleChange={(visible) => {
               visibilityHandler(visible, 'password');
             }}
-            value={inputsData.password}
+            value={password}
             name="password"
             onChange={inputsChangeHandler}
+            success={passCheck()}
+            block={true}
+            className={styles.input}
           />
-          <br />
           {/*password confirm field*/}
           <div>Confirm password:</div>
           <PasswordInput
-            passwordVisible={passwordsVisible.confirmPassword}
+            passwordVisible={confPassVisible}
             onPasswordVisibleChange={(visible) => {
               visibilityHandler(visible, 'confirmPassword');
             }}
-            value={inputsData.confirmPassword}
+            value={confirmPassword}
             name="confirmPassword"
             onChange={inputsChangeHandler}
+            success={confirmPassword.length > 0 && password === confirmPassword}
+            block={true}
+            className={styles.input}
           />
         </div>
         {/*buttons*/}
-        <div>
-          <Row align="middle">
-            <Col>
-              <Button view="secondary">Cancel</Button>
-            </Col>
-            <Col>
-              <Button view="primary" onClick={registerHandler}>
-                Register
-              </Button>
-            </Col>
-          </Row>
+        <div className={styles.buttonsBlock}>
+          <div className={styles.buttonCancel}>Cancel</div>
+          <div>
+            <Notification
+              badge="positive"
+              title="Оповещение:"
+              visible={isVisible}
+              offset={180}
+              onClickOutside={hideNotification}
+              onClose={hideNotification}
+              onCloseTimeout={hideNotification}
+            >
+              {getErrorMsg()}
+            </Notification>
+            {email.length > 0 && passCheck() ? (
+              <>
+                <div className={styles.buttonRegister} onClick={registerHandler}>
+                  Register
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.buttonRegister} onClick={toggleVisiblity}>
+                  Register
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    );
-  };
-
-  return <div className={cn('container', styles.root)}>{test()}</div>;
+    </div>
+  );
 };
