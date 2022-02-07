@@ -21,7 +21,39 @@ export const logoutApi = {
   },
 };
 
+export const profileApi = {
+  mePut(data: MePutRequestType) {
+    return instance.put<MePutRequestType, AxiosResponse<MePutResponseType>>(`auth/me`, data);
+  },
+};
+
+//Types
 export type InfoResponseType = {
   info: string;
   error: string;
+};
+
+export type UserResponseType = {
+  _id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  publicCardPacksCount: number;
+  created: Date;
+  updated: Date;
+  isAdmin: boolean;
+  verified: boolean;
+  rememberMe: boolean;
+  error: string;
+  token?: string;
+};
+
+export type MePutRequestType = {
+  name?: string;
+  avatar?: string;
+};
+
+export type MePutResponseType = {
+  updatedUser: UserResponseType;
+  error?: string;
 };
