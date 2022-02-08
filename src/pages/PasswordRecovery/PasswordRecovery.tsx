@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import cn from 'classnames';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +12,15 @@ import styles from './PasswordRecovery.module.scss';
 
 export const PasswordRecovery = () => {
   const [step, setStep] = useState<1 | 2>(1);
+
+  const onSubmitForm = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formElements = e.currentTarget.elements as typeof e.currentTarget.elements & {
+      email: { value: string };
+    };
+    console.log(formElements.email.value);
+  };
+
   return (
     <div className={cn('container', styles.root)}>
       <div className={styles.wrap}>
@@ -23,13 +32,15 @@ export const PasswordRecovery = () => {
             <Typography.Title tag="h2" view="xsmall">
               Forgot your password?
             </Typography.Title>
-            <Input label="email" name="email" />
-            <Typography.Text view="primary-medium" tag="p">
-              Enter your email address and we will send you further instructions
-            </Typography.Text>
-            <Button size="xs" view="tertiary" onClick={() => setStep(2)}>
-              Send Instructions
-            </Button>
+            <form onSubmit={onSubmitForm}>
+              <Input label="email" name="email" required />
+              <Typography.Text view="primary-medium" tag="p">
+                Enter your email address and we will send you further instructions
+              </Typography.Text>
+              <Button size="xs" type="submit" view="tertiary">
+                Send Instructions
+              </Button>
+            </form>
             <Typography.Text view="primary-medium" tag="p">
               Did you remember your password?
             </Typography.Text>

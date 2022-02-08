@@ -10,7 +10,6 @@ import styles from '../PasswordRecovery/PasswordRecovery.module.scss';
 
 export const SetNewPassword = () => {
   const { token } = useParams();
-  const [passwordVisible, setPasswordVisible] = useState(false);
   return (
     <div className={cn('container', styles.root)}>
       <code>token: ${token}</code>
@@ -21,12 +20,7 @@ export const SetNewPassword = () => {
         <Typography.Title tag="h2" view="xsmall">
           Create new password
         </Typography.Title>
-        <PasswordInput
-          passwordVisible={passwordVisible}
-          onPasswordVisibleChange={(visible) => {
-            setPasswordVisible(visible);
-          }}
-        />
+        <PasswordInput />
         <Typography.Text view="primary-medium" tag="p">
           Create new password and we will send you further instructions to email
         </Typography.Text>

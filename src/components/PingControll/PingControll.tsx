@@ -13,7 +13,7 @@ export const PingControl = () => {
     api.checkPing(Date.now()).then(({ data }) => setPing(data.ping));
   }, []);
   return (
-    <p className={styles.root}>
+    <div className={styles.root}>
       Ping:{' '}
       <mark
         className={cn(styles.ping, {
@@ -24,6 +24,6 @@ export const PingControl = () => {
       >
         {ping === -1 ? <Loader className={styles.loader} /> : ping}
       </mark>
-    </p>
+    </div>
   );
 };
