@@ -17,6 +17,7 @@ export const App = () => {
       <Link to="/registration">Registr</Link>
       <Link to="/404">Error404</Link>
       <Link to="/password-recovery">PasswordRecovery</Link>
+
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
