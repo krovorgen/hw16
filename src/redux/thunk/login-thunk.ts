@@ -3,12 +3,8 @@ import { api } from '../../api';
 import { setIsLoggedIn, setLoginLoading } from '../reducer/login-reducer';
 import { toast } from 'react-toastify';
 
-export const loginTC = (email: string, password: string, rememberMe: boolean) => async (dispatch: AppDispatch) => {
+export const loginTC = (email: string, password: string, rememberMe: boolean) => (dispatch: AppDispatch) => {
   dispatch(setLoginLoading(true));
-
-  await new Promise((resolve, reject) => {
-    setTimeout(resolve, 3000);
-  });
 
   api
     .login(email, password, rememberMe)

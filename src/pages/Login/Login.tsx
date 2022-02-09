@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React from 'react';
 import cn from 'classnames';
 
 import styles from './Login.module.scss';
@@ -8,69 +8,73 @@ import { loginTC } from '../../redux/thunk/login-thunk';
 import { useDispatch } from 'react-redux';
 import { Input } from '@alfalab/core-components/input';
 import { Checkbox } from '@alfalab/core-components/checkbox';
+import { useFormik } from 'formik';
 import { Button } from '@alfalab/core-components/button';
 import { PasswordInput } from '@alfalab/core-components/password-input';
+import * as Yup from 'yup';
 
 export const Login = () => {
   const { isLoggedIn, loading } = useAppSelector((state) => state.login);
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const loginForm = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().required().email(),
+      password: Yup.string().required(),
+    }),
+    onSubmit: ({ email, password, rememberMe }) => {
+      dispatch(loginTC(email, password, rememberMe));
+    },
+  });
 
   if (isLoggedIn) {
     return <Navigate to={'/'} />;
   }
 
-  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    switch (e.target.name) {
-      case 'email':
-        setEmail(e.target.value);
-        break;
-
-      case 'password':
-        setPassword(e.target.value);
-        break;
-
-      default:
-        return;
-    }
-  };
-
-  const handleRememberMe = (e: ChangeEvent<HTMLInputElement> | undefined) => {
-    setRememberMe((prev) => !prev);
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    dispatch(loginTC(email, password, rememberMe));
-  };
-
   return (
     <div className={cn('container', styles.root)}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={loginForm.handleSubmit} className={styles.form}>
         <div className={styles.inputRow}>
-          <Input name={'email'} placeholder={'Email'} value={email} onChange={handleChangeInput} block={true} />
-        </div>
-
-        <div className={styles.inputRow}>
-          <PasswordInput
-            name={'password'}
-            placeholder={'Password'}
-            value={password}
-            onChange={handleChangeInput}
+          <Input
+            placeholder={'Email'}
             block={true}
+            {...loginForm.getFieldProps('email')}
+            error={loginForm.touched.email && loginForm.errors.email}
+            onBlur={loginForm.handleBlur}
           />
         </div>
 
         <div className={styles.inputRow}>
-          <Checkbox checked={rememberMe} onChange={handleRememberMe} label={'Remember me'} />
+          <PasswordInput
+            placeholder={'Password'}
+            block={true}
+            {...loginForm.getFieldProps('password')}
+            error={loginForm.touched.password && loginForm.errors.password}
+            onBlur={loginForm.handleBlur}
+          />
         </div>
 
         <div className={styles.inputRow}>
-          <Button type={'submit'} view={'primary'} loading={loading} block={true}>
+          <Checkbox
+            checked={loginForm.values.rememberMe}
+            onChange={() => loginForm.setFieldValue('rememberMe', !loginForm.values.rememberMe)}
+            label={'Remember me'}
+          />
+        </div>
+
+        <div className={styles.inputRow}>
+          <Button
+            type={'submit'}
+            view={'primary'}
+            loading={loading}
+            block={true}
+            disabled={!loginForm.isValid || !loginForm.dirty}
+          >
             Submit
           </Button>
         </div>
