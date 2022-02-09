@@ -4,10 +4,12 @@ import cn from 'classnames';
 import { Input } from '@alfalab/core-components/input';
 import { PasswordInput } from '@alfalab/core-components/password-input';
 import { Typography } from '@alfalab/core-components/typography';
-import { Notification } from '@alfalab/core-components/notification';
 
 import styles from './Registr.module.scss';
 import { api } from '../../api';
+import {Link} from "react-router-dom";
+import * as CONSTANTS from '../../helpers/constants'
+import {Button} from "@alfalab/core-components/button";
 
 export const Registr = () => {
   //Passwords visibility conditions
@@ -19,9 +21,6 @@ export const Registr = () => {
   const [password, setPassword] = React.useState('');
   //Confirm Password input field value
   const [confirmPassword, SetConfirmPassword] = React.useState('');
-  const [isVisible, setIsVisible] = React.useState(false);
-  const toggleVisiblity = React.useCallback(() => setIsVisible((prev) => !prev), []);
-  const hideNotification = React.useCallback(() => setIsVisible(false), []);
 
   //Toggle passwords visibility
   const visibilityHandler = (visible: boolean, name: 'password' | 'confirmPassword') => {
@@ -42,30 +41,49 @@ export const Registr = () => {
     return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
   };
 
-  //Returns notification message
-  const getErrorMsg = () => {
-    if (email.length === 0 && password.length === 0 && confirmPassword.length === 0) {
-      return 'Пользовательские данные не заполнены!';
+  const emailValidation = (email: string) => {
+    const emailCheck = () => {
+      return /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email)
     }
-    if (email.length === 0 && passCheck()) {
-      return 'Поле e-mail не заполнено!';
+    if (email.length === 0 && !emailCheck()) {
+      return CONSTANTS.REG_ERROR_EMPTY_EMAIL;
+    } else if (email.length > 0 && !emailCheck()) {
+      return CONSTANTS.REG_ERROR_WRONG_EMAIL;
+    } else {
+      return ''
     }
-    if (email.length === 0 && !passCheck()) {
-      return 'Поле e-mail не заполнено, пароль и подтверждающий пароль не совпадают!';
+  }
+
+  const passValidation = (pass: string) => {
+    if (pass.length === 0) {
+      return CONSTANTS.REG_ERROR_EMPTY_PASS;
+    } else if (pass.length > 0 && pass.length < 7) {
+      return CONSTANTS.REG_ERROR_SHORT_PASS;
+    } else {
+      return ''
     }
-    if (email.length > 0 && password.length === 0 && confirmPassword.length === 0) {
-      return 'Поля ввода пароля и подтверждающего пароля не заполнены!';
+  }
+
+  const confPassValidation = (pass: string, confPass: string) => {
+    if (!passValidation(confPass)) {
+      if (pass !== confPass) {
+        return CONSTANTS.REG_ERROR_DIFF_PASS;
+      } else {}
+      return ''
+    } else {
+      return passValidation(confPass)
     }
-    if (email.length > 0 && !passCheck()) {
-      return 'Пароль и подтверждающий пароль не совпадают!';
-    }
-  };
+  }
+
+  const registerButtonValidation = () => {
+    return emailValidation(email) === '' && confPassValidation(password, confirmPassword) === ''
+  }
 
   //Change input value for fields: email, password, confirm password
   const inputsChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     switch (event.currentTarget.name) {
       case 'email':
-        setEmail(event.currentTarget.value);
+        setEmail(event.currentTarget.value.trim());
         break;
       case 'password':
         setPassword(event.currentTarget.value);
@@ -83,79 +101,69 @@ export const Registr = () => {
   };
 
   return (
-    <div className={cn('container', styles.root)}>
-      <div className={styles.modalWindow}>
-        <div className={styles.titlesBlock}>
-          <Typography.Title tag={'h1'} className={styles.title}>
-            It-incubator
-          </Typography.Title>
-          <Typography.Title tag={'h2'} className={styles.subtitle}>
-            Sign Up
-          </Typography.Title>
-        </div>
-        <div className={styles.inputsBlock}>
-          <div>Email:</div>
-          <Input name="email" value={email} onChange={inputsChangeHandler} type={'email'} className={styles.input} />
-          {/*password input field*/}
-          <div>Password:</div>
-          <PasswordInput
-            passwordVisible={passVisible}
-            onPasswordVisibleChange={(visible) => {
-              visibilityHandler(visible, 'password');
-            }}
-            value={password}
-            name="password"
-            onChange={inputsChangeHandler}
-            success={passCheck()}
-            block={true}
-            className={styles.input}
-          />
-          {/*password confirm field*/}
-          <div>Confirm password:</div>
-          <PasswordInput
-            passwordVisible={confPassVisible}
-            onPasswordVisibleChange={(visible) => {
-              visibilityHandler(visible, 'confirmPassword');
-            }}
-            value={confirmPassword}
-            name="confirmPassword"
-            onChange={inputsChangeHandler}
-            success={confirmPassword.length > 0 && password === confirmPassword}
-            block={true}
-            className={styles.input}
-          />
-        </div>
-        {/*buttons*/}
-        <div className={styles.buttonsBlock}>
-          <div className={styles.buttonCancel}>Cancel</div>
-          <div>
-            <Notification
-              badge="positive"
-              title="Оповещение:"
-              visible={isVisible}
-              offset={180}
-              onClickOutside={hideNotification}
-              onClose={hideNotification}
-              onCloseTimeout={hideNotification}
-            >
-              {getErrorMsg()}
-            </Notification>
-            {email.length > 0 && passCheck() ? (
-              <>
-                <div className={styles.buttonRegister} onClick={registerHandler}>
-                  Register
-                </div>
-              </>
-            ) : (
-              <>
-                <div className={styles.buttonRegister} onClick={toggleVisiblity}>
-                  Register
-                </div>
-              </>
-            )}
+      <div className={cn('container')}>
+        <div className={styles.modalWindow}>
+          <div className={styles.titlesBlock}>
+            <Typography.Title tag={'h1'} className={styles.title}>
+              It-incubator
+            </Typography.Title>
+            <Typography.Title tag={'h2'} className={styles.subtitle}>
+              Sign Up
+            </Typography.Title>
+          </div>
+          <div className={styles.inputsBlock}>
+            <div>Email:</div>
+            <Input
+                name="email"
+                value={email}
+                onChange={inputsChangeHandler}
+                type={'email'}
+                className={styles.input}
+                error={emailValidation(email)}
+            />
+            {/*password input field*/}
+            <div>Password:</div>
+            <PasswordInput
+                passwordVisible={passVisible}
+                onPasswordVisibleChange={(visible) => {
+                  visibilityHandler(visible, 'password');
+                }}
+                value={password}
+                name="password"
+                onChange={inputsChangeHandler}
+                success={passCheck()}
+                block={true}
+                className={styles.input}
+                error={passValidation(password)}
+            />
+            {/*password confirm field*/}
+            <div>Confirm password:</div>
+            <PasswordInput
+                passwordVisible={confPassVisible}
+                onPasswordVisibleChange={(visible) => {
+                  visibilityHandler(visible, 'confirmPassword');
+                }}
+                value={confirmPassword}
+                name="confirmPassword"
+                onChange={inputsChangeHandler}
+                success={confirmPassword.length > 0 && password === confirmPassword}
+                block={true}
+                className={styles.input}
+                error={confPassValidation(password, confirmPassword)}
+            />
+          </div>
+          {/*buttons*/}
+          <div className={styles.buttonsBlock}>
+            <Link to="/login">
+              <Button size={'s'} view="secondary">
+                Cancel
+              </Button>
+            </Link>
+            <Button size={'s'} view="primary" disabled={!registerButtonValidation()} onClick={registerHandler}>
+              Register
+            </Button>
           </div>
         </div>
       </div>
-    </div>
   );
 };

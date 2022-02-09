@@ -28,12 +28,3 @@
   align-items: center;
   justify-content: space-between;
 }
-
-@mixin buttonStyle($width: 124px, $color: #2b418e, $bgColor: #d7d8ee) {
-  width: $width;
-  height: 36px;
-  border-radius: 18px;
-  color: $color;
-  background-color: $bgColor;
-  cursor: pointer;
-}
