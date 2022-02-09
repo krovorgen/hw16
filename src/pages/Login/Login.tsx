@@ -41,8 +41,8 @@ export const Login = () => {
       <form onSubmit={loginForm.handleSubmit} className={styles.form}>
         <div className={styles.inputRow}>
           <Input
-            placeholder={'Email'}
-            block={true}
+            placeholder="Email"
+            block
             {...loginForm.getFieldProps('email')}
             error={loginForm.touched.email && loginForm.errors.email}
             onBlur={loginForm.handleBlur}
@@ -51,8 +51,8 @@ export const Login = () => {
 
         <div className={styles.inputRow}>
           <PasswordInput
-            placeholder={'Password'}
-            block={true}
+            placeholder="Password"
+            block
             {...loginForm.getFieldProps('password')}
             error={loginForm.touched.password && loginForm.errors.password}
             onBlur={loginForm.handleBlur}
@@ -61,6 +61,7 @@ export const Login = () => {
 
         <div className={styles.inputRow}>
           <Checkbox
+            name="rememberMe"
             checked={loginForm.values.rememberMe}
             onChange={() => loginForm.setFieldValue('rememberMe', !loginForm.values.rememberMe)}
             label={'Remember me'}
@@ -69,10 +70,10 @@ export const Login = () => {
 
         <div className={styles.inputRow}>
           <Button
-            type={'submit'}
-            view={'primary'}
+            type="submit"
+            view="primary"
             loading={loading}
-            block={true}
+            block
             disabled={!loginForm.isValid || !loginForm.dirty}
           >
             Submit
