@@ -1,3 +1,3 @@
 import { toast } from 'react-toastify';
 
-export const catchHandler = (error: any) => toast.error(error.message);
+export const catchHandler = ({ response }: any) => toast.error(response.data.error);

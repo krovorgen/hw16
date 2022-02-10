@@ -5,9 +5,7 @@ const logoutSlice = createSlice({
   name: 'logout',
   initialState: {}, //todo type of initial state of Login
   reducers: {
-    setProfileDeleteData(state) {
-      state.isLoggedIn = false; //todo to take name from Login
-    },
+    setProfileDeleteData(state) {},
   },
 });
 
