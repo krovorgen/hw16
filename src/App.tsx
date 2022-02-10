@@ -7,6 +7,7 @@ import { Login } from './pages/Login';
 import { Main } from './pages/Main';
 import { Error404 } from './pages/Error404';
 import { PasswordRecovery } from './pages/PasswordRecovery';
+
 import { PingControl } from './components/PingControll';
 import { SetNewPassword } from './pages/SetNewPassword';
 

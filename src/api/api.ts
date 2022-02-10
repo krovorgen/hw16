@@ -5,6 +5,7 @@ const BASE_URL =
 
 const instance = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 export const api = {
@@ -31,6 +32,10 @@ export const api = {
       password,
       rememberMe,
     });
+  },
+
+  register(email: string, password: string) {
+    return instance.post(`auth/register`, { email, password });
   },
 };
 
