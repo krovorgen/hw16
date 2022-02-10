@@ -25,9 +25,35 @@ export const api = {
   setNewPassword(password: string, resetPasswordToken: string) {
     return instance.post<AxiosResponse<AuthForgotRT>>(`auth/set-new-password`, { password, resetPasswordToken });
   },
+  login(email: string, password: string, rememberMe: boolean) {
+    return instance.post<LoginRequestType, AxiosResponse<LoginResponseType>>('auth/login', {
+      email,
+      password,
+      rememberMe,
+    });
+  },
 };
 
 type AuthForgotRT = {
   info: string;
   error: string;
+};
+type LoginRequestType = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
+
+type LoginResponseType = {
+  _id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  publicCardPacksCount: number;
+  created: Date;
+  updated: Date;
+  isAdmin: boolean;
+  verified: boolean;
+  rememberMe: boolean;
+  error?: string;
 };
