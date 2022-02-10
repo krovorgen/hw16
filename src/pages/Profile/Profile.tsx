@@ -2,7 +2,9 @@ import React, { ChangeEvent, useState } from 'react';
 import cn from 'classnames';
 import styles from './Profile.module.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { logoutTC, updateProfileInfo } from '../../redux/reducer/profile-reducer';
+import { updateProfileInfo } from '../../redux/thunk/profile-thunks';
+import { Logout } from '../../components/logout';
+import { logout } from '../../redux/thunk/logout-thunk';
 
 export const Profile = () => {
   const profileName = useAppSelector((store) => store.profile.name);
@@ -20,13 +22,6 @@ export const Profile = () => {
 
   const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => setName(e.currentTarget.value.trim());
 
-  /*   const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-             if (e.key === 'Enter') {
-         setEditName(false);
-         onSubmitName();
-       }
-     };*/ //todo on enter handler
-
   const onSubmitName = () => {
     if (name && name !== profileName) {
       dispatch(updateProfileInfo({ name }));
@@ -41,7 +36,7 @@ export const Profile = () => {
     onSubmitName();
   };
 
-  const onClickLogOutHandler = () => dispatch(logoutTC());
+  const onClickLogOutHandler = () => dispatch(logout());
 
   const selectAllHandler = (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.select();
 
@@ -60,14 +55,7 @@ export const Profile = () => {
       </div>
       <div>
         {editName ? (
-          <input
-            type={'text'}
-            value={name}
-            onChange={changeNameHandler}
-            onFocus={selectAllHandler}
-            /*onKeyPress={onEnterHandler}*/ //todo on enter handler
-            autoFocus
-          />
+          <input type={'text'} value={name} onChange={changeNameHandler} onFocus={selectAllHandler} autoFocus />
         ) : (
           <span> Name : {profileName}</span>
         )}
@@ -76,7 +64,9 @@ export const Profile = () => {
       <div>
         <button onClick={editNameHandler}>Edit</button>
         <button onClick={onClickSaveHandler}>Save</button>
-        <button onClick={onClickLogOutHandler}>Log out</button>
+        <button onClick={onClickLogOutHandler}>
+          <Logout />
+        </button>
       </div>
     </div>
   );

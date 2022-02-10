@@ -6,7 +6,7 @@ const BASE_URL =
 const instance = axios.create({
   withCredentials: true,
   baseURL: BASE_URL,
-  headers: {},
+  /*  headers: {},*/
 });
 
 export const api = {
@@ -16,7 +16,7 @@ export const api = {
 };
 
 export const logoutApi = {
-  LogOut() {
+  logout() {
     return instance.delete<{}, AxiosResponse<InfoResponseType>>(`auth/me`);
   },
 };
