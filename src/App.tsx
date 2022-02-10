@@ -9,6 +9,7 @@ import { Error404 } from './pages/Error404';
 import { PasswordRecovery } from './pages/PasswordRecovery';
 
 import { PingControl } from './components/PingControll';
+import { SetNewPassword } from './pages/SetNewPassword';
 
 export const App = () => {
   return (
@@ -18,13 +19,14 @@ export const App = () => {
       <Link to="/registration">Registr</Link>
       <Link to="/404">Error404</Link>
       <Link to="/password-recovery">PasswordRecovery</Link>
-
+      <Link to="/set-new-password">SetNewPassword</Link>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registr />} />
         <Route path="/password-recovery" element={<PasswordRecovery />} />
-        <Route path="/404" element={<Error404 />} />
+        <Route path="*" element={<Error404 />} />
+        <Route path="/set-new-password/:token" element={<SetNewPassword />} />
       </Routes>
       <ToastContainer
         position="bottom-left"
