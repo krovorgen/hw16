@@ -1,5 +1,6 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import cn from 'classnames';
+import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 import { Input } from '@alfalab/core-components/input';
@@ -24,7 +25,8 @@ export const PasswordRecovery = () => {
     e.preventDefault();
     api
       .authForgot(email)
-      .then(() => {
+      .then(({ data }) => {
+        toast.success(data.data.info);
         setStep(2);
       })
       .catch(catchHandler);

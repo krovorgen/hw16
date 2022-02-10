@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const BASE_URL =
   process.env.NODE_ENV === 'development' ? 'http://localhost:7542/2.0/' : 'https://neko-back.herokuapp.com/2.0/';
@@ -12,7 +12,7 @@ export const api = {
     return instance.post(`ping`, { frontTime });
   },
   authForgot(email: string) {
-    return instance.post(`auth/forgot`, {
+    return instance.post<AxiosResponse<AuthForgotRT>>(`auth/forgot`, {
       email,
       from: 'friday-super-team <friday-super-team@yandex.by>',
       message: `
@@ -23,6 +23,11 @@ export const api = {
     });
   },
   setNewPassword(password: string, resetPasswordToken: string) {
-    return instance.post(`auth/set-new-password`, { password, resetPasswordToken });
+    return instance.post<AxiosResponse<AuthForgotRT>>(`auth/set-new-password`, { password, resetPasswordToken });
   },
+};
+
+type AuthForgotRT = {
+  info: string;
+  error: string;
 };
