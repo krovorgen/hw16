@@ -34,7 +34,7 @@ export const SetNewPassword = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
-  if (!isLoggedIn) return <Navigate to="/login" />;
+  if (isLoggedIn) return <Navigate to="/" />;
 
   return (
     <div className={cn('container', styles.root)}>

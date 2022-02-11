@@ -34,9 +34,7 @@ export const Login = () => {
     },
   });
 
-  if (isLoggedIn) {
-    return <Navigate to={'/'} />;
-  }
+  if (isLoggedIn) return <Navigate to="/" />;
 
   return (
     <div className={cn('container', styles.root)}>
