@@ -26,8 +26,8 @@ export const PasswordRecovery = () => {
     api
       .authForgot(email)
       .then(({ data }) => {
-        toast.success(data.data.info);
         setStep(2);
+        toast.success(data.data.info);
       })
       .catch(catchHandler);
   };

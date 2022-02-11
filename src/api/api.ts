@@ -19,7 +19,7 @@ export const api = {
       message: `
       <div style="background-color: #0f0; padding: 15px">
         password recovery link:
-        <a href='${BASE_URL}/set-new-password/$token$'>link</a>
+        <a href='https://hw16.vercel.app/set-new-password/$token$'>link</a>
 	    </div>`,
     });
   },

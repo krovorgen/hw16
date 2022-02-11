@@ -29,7 +29,6 @@ export const SetNewPassword = () => {
 
   return (
     <div className={cn('container', styles.root)}>
-      <code>token: ${token}</code>
       <div className={styles.wrap}>
         <Typography.Title tag="h1" view="small">
           It-incubator
