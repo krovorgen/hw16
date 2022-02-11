@@ -39,6 +39,9 @@ export const api = {
   register(email: string, password: string) {
     return instance.post(`auth/register`, { email, password });
   },
+  authMe() {
+    return instance.post(`auth/me`, {});
+  },
 };
 
 type AuthForgotRT = {

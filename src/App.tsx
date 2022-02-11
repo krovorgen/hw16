@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -11,8 +11,20 @@ import { PasswordRecovery } from './pages/PasswordRecovery';
 import { PingControl } from './components/PingControll';
 import { SetNewPassword } from './pages/SetNewPassword';
 import { Header } from './components/Header';
+import { useAppSelector } from './redux/hooks';
+import { useDispatch } from 'react-redux';
+import { initializedTC } from './redux/thunk/app-thunk';
+import { Preloader } from './components/Preloader';
 
 export const App = () => {
+  const dispatch = useDispatch();
+  const initialized = useAppSelector((state) => state.app.initialized);
+
+  useEffect(() => {
+    dispatch(initializedTC());
+  }, [dispatch]);
+
+  if (initialized) return <Preloader />;
   return (
     <>
       <Header />
