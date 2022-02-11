@@ -1,28 +1,22 @@
-import { MePutRequestType, profileApi } from '../../api';
+import { api, MePutRequestType } from '../../api';
 import { updateProfileData } from '../reducer/profile-reducer';
 import { Dispatch } from 'redux';
+import { toast } from 'react-toastify';
+import { setLoginLoading } from '../reducer/login-reducer';
 
-export const updateProfileInfo = (data: MePutRequestType) => async (dispatch: Dispatch) => {
-  try {
-    const response = await profileApi.mePut(data);
-    let { name, avatar } = response.data.updatedUser;
-    dispatch(updateProfileData({ text: name, avatar }));
-  } catch (err) {
-    //todo error
-  } finally {
-    // todo dispatch app loading (false)
-  }
+export const updateProfileInfo = (data: MePutRequestType) => (dispatch: Dispatch) => {
+  api
+    .mePut(data)
+    .then((response) => {
+      let { name, avatar } = response.data.updatedUser;
+      dispatch(updateProfileData({ text: name, avatar }));
+    })
+
+    .catch((e) => {
+      const error = e.response ? e.response.data.error : e.message;
+      toast.error(error);
+    })
+    .finally(() => {
+      dispatch(setLoginLoading(false));
+    });
 };
-/*
-//Logout thunk
-export const logout = () => async (dispatch: Dispatch) => {
-  try {
-    await logoutApi.logout();
-    dispatch(setProfileDeleteData());
-    /!*dispatch(setIsLoggedInAC(false)); *!/ //todo change name of action creator from Login
-  } catch (err) {
-    //todo error
-  } finally {
-    // todo dispatch app loading (false)
-  }
-};*/

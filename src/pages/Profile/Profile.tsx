@@ -5,16 +5,17 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { updateProfileInfo } from '../../redux/thunk/profile-thunks';
 import { Logout } from '../../components/logout';
 import { logout } from '../../redux/thunk/logout-thunk';
+import { Navigate } from 'react-router-dom';
 
 export const Profile = () => {
   const profileName = useAppSelector((store) => store.profile.name);
   const profileEmail = useAppSelector((store) => store.profile.email);
   const profileAvatar = useAppSelector((store) => store.profile.avatar);
-  /*    const isLoggedIn = useAppSelector<RootState, boolean>(store => store.login.isLoggedIn);*/ //todo change name from Login
+  const { isLoggedIn } = useAppSelector((state) => state.login);
 
   const dispatch = useAppDispatch();
 
-  /*  const [avatar, setAvatar] = useState('');*/ //todo edit avatar
+  /* const [avatar, setAvatar] = useState('');*/
   const [name, setName] = useState(profileName);
   const [editName, setEditName] = useState(false);
 
@@ -40,9 +41,9 @@ export const Profile = () => {
 
   const selectAllHandler = (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.select();
 
-  /*   if (!isLoggedIn) {
-       return <Navigate to={'/login'}/>
-     }*/ //todo navigation to login
+  if (isLoggedIn) {
+    return <Navigate to={'/login'} />;
+  }
 
   return (
     <div className={cn('container', styles.root)}>

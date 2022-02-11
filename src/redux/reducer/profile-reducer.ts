@@ -1,7 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-//slice reducer
 const profileSlice = createSlice({
   name: 'profile',
   initialState: {} as profileInitialStateType,
@@ -15,10 +14,8 @@ const profileSlice = createSlice({
 
 export default profileSlice.reducer;
 
-// slice action creators
 export const { updateProfileData } = profileSlice.actions;
 
-//types
 export type profileInitialStateType = {
   _id: string;
   email: string;
