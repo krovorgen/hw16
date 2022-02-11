@@ -1,0 +1,19 @@
+@import "./src/scss/variables";
+@import "./src/scss/mixins";
+
+.root {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: transparent;
+}

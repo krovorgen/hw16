@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { Registr } from './pages/Registr';
@@ -11,23 +11,32 @@ import { PasswordRecovery } from './pages/PasswordRecovery';
 import { PingControl } from './components/PingControll';
 import { Profile } from './pages/Profile';
 import { SetNewPassword } from './pages/SetNewPassword';
+import { Header } from './components/Header';
+import { useAppSelector } from './redux/hooks';
+import { useDispatch } from 'react-redux';
+import { initializedTC } from './redux/thunk/app-thunk';
+import { Preloader } from './components/Preloader';
+import { RoutesEnum } from './helpers/routes';
 
 export const App = () => {
+  const dispatch = useDispatch();
+  const initialized = useAppSelector((state) => state.app.initialized);
+
+  useEffect(() => {
+    dispatch(initializedTC());
+  }, [dispatch]);
+
+  if (initialized) return <Preloader />;
   return (
     <>
-      <Link to="/">Profile</Link>
-      <Link to="/">Main</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/registration">Registr</Link>
-      <Link to="/404">Error404</Link>
-      <Link to="/password-recovery">PasswordRecovery</Link>
-      <Link to="/set-new-password">SetNewPassword</Link>
+      <Header />
       <Routes>
-        <Route path="/" element={<Profile />} />
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registr />} />
-        <Route path="/password-recovery" element={<PasswordRecovery />} />
+        <Route path={RoutesEnum.Main} element={<Main />} />
+        <Route path={RoutesEnum.Profile} element={<Profile />} />
+        <Route path={RoutesEnum.Login} element={<Login />} />
+        <Route path={RoutesEnum.Registration} element={<Registr />} />
+        <Route path={RoutesEnum.PasswordRecovery} element={<PasswordRecovery />} />
+        <Route path={RoutesEnum.SetNewPassword} element={<SetNewPassword />} />
         <Route path="*" element={<Error404 />} />
         <Route path="/set-new-password/:token" element={<SetNewPassword />} />
       </Routes>

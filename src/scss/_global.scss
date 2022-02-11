@@ -1,4 +1,5 @@
 body {
+  min-height: 100vh;
   font-family: "Ubuntu", sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -10,4 +11,29 @@ body {
   margin: 0 auto;
   padding: 0 10px;
   max-width: 1220px;
+}
+
+.form-wrap {
+  margin: auto;
+  padding: 24px 32px;
+  width: 100%;
+  min-height: 468px;
+  max-width: 420px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #f9f9fe;
+
+  input {
+    text-align: left;
+  }
+}
+
+.form-title {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.form-subtitle {
+  margin-bottom: 40px;
+  text-align: center;
 }
