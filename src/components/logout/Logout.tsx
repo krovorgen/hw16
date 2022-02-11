@@ -10,7 +10,7 @@ export const Logout = () => {
 
   return (
     <div className={cn('container', styles.root)} onClick={() => dispatch(setProfileDeleteData())}>
-      {LogOutMIcon}
+      <LogOutMIcon />
     </div>
   );
 };

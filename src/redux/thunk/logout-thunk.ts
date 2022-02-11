@@ -1,14 +1,20 @@
 import { Dispatch } from 'redux';
-import { logoutApi } from '../../api';
 import { setProfileDeleteData } from '../reducer/logout-reducer';
+import { api } from '../../api';
+import { toast } from 'react-toastify';
+import { setLoginLoading } from '../reducer/login-reducer';
 
-export const logout = () => async (dispatch: Dispatch) => {
-  try {
-    await logoutApi.logout();
-    dispatch(setProfileDeleteData());
-  } catch (err) {
-    //todo error
-  } finally {
-    // todo dispatch app loading (false)
-  }
+export const logout = () => (dispatch: Dispatch) => {
+  api
+    .logout()
+    .then(() => {
+      dispatch(setProfileDeleteData());
+    })
+    .catch((e) => {
+      const error = e.response ? e.response.data.error : e.message;
+      toast.error(error);
+    })
+    .finally(() => {
+      dispatch(setLoginLoading(false));
+    });
 };
