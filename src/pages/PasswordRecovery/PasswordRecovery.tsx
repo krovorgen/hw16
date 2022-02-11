@@ -16,6 +16,7 @@ import styles from './PasswordRecovery.module.scss';
 export const PasswordRecovery = () => {
   const [step, setStep] = useState<1 | 2>(1);
   const [email, setEmail] = useState('');
+  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const changeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.currentTarget.value);
@@ -23,13 +24,15 @@ export const PasswordRecovery = () => {
 
   const onSubmitForm = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoadingStatus(true);
     api
       .authForgot(email)
       .then(({ data }) => {
         setStep(2);
-        toast.success(data.data.info);
+        toast.success(data.info);
       })
-      .catch(catchHandler);
+      .catch(catchHandler)
+      .finally(() => setLoadingStatus(false));
   };
 
   return (
@@ -48,7 +51,7 @@ export const PasswordRecovery = () => {
               <Typography.Text view="primary-medium" tag="p">
                 Enter your email address and we will send you further instructions
               </Typography.Text>
-              <Button size="xs" type="submit" view="tertiary">
+              <Button loading={loadingStatus} size="xs" type="submit" view="tertiary">
                 Send Instructions
               </Button>
             </form>

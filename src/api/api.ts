@@ -13,7 +13,7 @@ export const api = {
     return instance.post(`ping`, { frontTime });
   },
   authForgot(email: string) {
-    return instance.post<AxiosResponse<AuthForgotRT>>(`auth/forgot`, {
+    return instance.post<AuthForgotRT>(`auth/forgot`, {
       email,
       from: 'friday-super-team <friday-super-team@yandex.by>',
       message: `

@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -15,8 +15,11 @@ export const SetNewPassword = () => {
   const { token } = useParams();
   let navigate = useNavigate();
 
+  const [loadingStatus, setLoadingStatus] = useState(false);
+
   const onSubmitForm = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoadingStatus(true);
     const formElements = e.currentTarget.elements as typeof e.currentTarget.elements & {
       password: { value: string };
     };
@@ -24,9 +27,10 @@ export const SetNewPassword = () => {
       .setNewPassword(formElements.password.value, token!)
       .then(({ data }) => {
         toast.success(data.info);
-        navigate('login');
+        navigate('/login');
       })
-      .catch(catchHandler);
+      .catch(catchHandler)
+      .finally(() => setLoadingStatus(false));
   };
 
   return (
@@ -43,7 +47,7 @@ export const SetNewPassword = () => {
           <Typography.Text view="primary-medium" tag="p">
             Create new password and we will send you further instructions to email
           </Typography.Text>
-          <Button size="xs" view="tertiary" type="submit">
+          <Button loading={loadingStatus} size="xs" view="tertiary" type="submit">
             Create new password
           </Button>
         </form>
