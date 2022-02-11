@@ -30,7 +30,7 @@ export const SetNewPassword = () => {
       .setNewPassword(formElements.password.value, token!)
       .then(({ data }) => {
         toast.success(data.info);
-        navigate('/login');
+        navigate(RoutesEnum.Login);
       })
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
