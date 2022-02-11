@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Typography } from '@alfalab/core-components/typography';
 import { PasswordInput } from '@alfalab/core-components/password-input';
@@ -13,6 +13,7 @@ import styles from '../PasswordRecovery/PasswordRecovery.module.scss';
 
 export const SetNewPassword = () => {
   const { token } = useParams();
+  let navigate = useNavigate();
 
   const onSubmitForm = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +23,8 @@ export const SetNewPassword = () => {
     api
       .setNewPassword(formElements.password.value, token!)
       .then(({ data }) => {
-        toast.success(data.data.info);
+        toast.success(data.info);
+        navigate('login');
       })
       .catch(catchHandler);
   };

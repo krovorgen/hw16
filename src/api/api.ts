@@ -24,7 +24,7 @@ export const api = {
     });
   },
   setNewPassword(password: string, resetPasswordToken: string) {
-    return instance.post<AxiosResponse<AuthForgotRT>>(`auth/set-new-password`, { password, resetPasswordToken });
+    return instance.post<AuthForgotRT>(`auth/set-new-password`, { password, resetPasswordToken });
   },
   login(email: string, password: string, rememberMe: boolean) {
     return instance.post<LoginRequestType, AxiosResponse<LoginResponseType>>('auth/login', {
