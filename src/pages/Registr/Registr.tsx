@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import cn from 'classnames';
 
 import { Input } from '@alfalab/core-components/input';
@@ -20,6 +20,7 @@ export const Registr = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [loadingStatus, setLoadingStatus] = useState(false);
 
   const passCheck = () => {
     return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
@@ -79,6 +80,7 @@ export const Registr = () => {
   };
 
   const registerHandler = () => {
+    setLoadingStatus(true);
     api
       .register(email, password)
       .then(({ data }) => {
@@ -87,7 +89,8 @@ export const Registr = () => {
         setPassword('');
         setConfirmPassword('');
       })
-      .catch(catchHandler);
+      .catch(catchHandler)
+      .finally(() => setLoadingStatus(false));
   };
 
   if (isLoggedIn) return <Navigate to="/" />;
@@ -136,7 +139,13 @@ export const Registr = () => {
               Cancel
             </Button>
           </Link>
-          <Button size="s" view="primary" disabled={!registerButtonValidation()} onClick={registerHandler}>
+          <Button
+            size="s"
+            view="primary"
+            loading={loadingStatus}
+            disabled={!registerButtonValidation()}
+            onClick={registerHandler}
+          >
             Register
           </Button>
         </div>
