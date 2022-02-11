@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 import { Registr } from './pages/Registr';
@@ -10,23 +10,19 @@ import { PasswordRecovery } from './pages/PasswordRecovery';
 
 import { PingControl } from './components/PingControll';
 import { SetNewPassword } from './pages/SetNewPassword';
+import { Header } from './components/Header';
 
 export const App = () => {
   return (
     <>
-      <Link to="/">Main</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/registration">Registr</Link>
-      <Link to="/404">Error404</Link>
-      <Link to="/password-recovery">PasswordRecovery</Link>
-      <Link to="/set-new-password">SetNewPassword</Link>
+      <Header />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registr />} />
         <Route path="/password-recovery" element={<PasswordRecovery />} />
-        <Route path="*" element={<Error404 />} />
         <Route path="/set-new-password/:token" element={<SetNewPassword />} />
+        <Route path="*" element={<Error404 />} />
       </Routes>
       <ToastContainer
         position="bottom-left"
