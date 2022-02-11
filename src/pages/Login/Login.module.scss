@@ -1,11 +1,35 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
-.form {
-  margin: 50px auto 0;
-  max-width: 300px;
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.inputRow {
-  margin-bottom: 15px;
+.input {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.form {
+  margin-bottom: 32px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.text {
+  margin-bottom: 8px;
+  text-align: center;
+  color: rgba(#2d2e46, 0.5);
+}
+
+.registration {
+  display: block;
+  text-align: center;
 }

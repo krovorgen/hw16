@@ -17,17 +17,6 @@ export const Registr = () => {
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const visibilityHandler = (visible: boolean, name: 'password' | 'confirmPassword') => {
-    switch (name) {
-      case 'password':
-        break;
-      case 'confirmPassword':
-        break;
-      default:
-        break;
-    }
-  };
-
   const passCheck = () => {
     return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
   };
@@ -50,8 +39,6 @@ export const Registr = () => {
       return CONSTANTS.REG_ERROR_EMPTY_PASS;
     } else if (pass.length > 0 && pass.length < 8) {
       return CONSTANTS.REG_ERROR_SHORT_PASS;
-    } else {
-      return '';
     }
   };
 
@@ -95,60 +82,50 @@ export const Registr = () => {
   };
 
   return (
-    <div className={cn('container')}>
-      <div className={styles.modalWindow}>
-        <div className={styles.titlesBlock}>
-          <Typography.Title tag={'h1'} className={styles.title}>
-            It-incubator
-          </Typography.Title>
-          <Typography.Title tag={'h2'} className={styles.subtitle}>
-            Sign Up
-          </Typography.Title>
-        </div>
-        <div className={styles.inputsBlock}>
-          <div>Email:</div>
-          <Input
-            name="email"
-            value={email}
-            onChange={inputsChangeHandler}
-            type={'email'}
-            className={styles.input}
-            error={emailValidation(email)}
-          />
-          <div>Password:</div>
-          <PasswordInput
-            onPasswordVisibleChange={(visible) => {
-              visibilityHandler(visible, 'password');
-            }}
-            value={password}
-            name="password"
-            onChange={inputsChangeHandler}
-            success={passCheck()}
-            block
-            className={styles.input}
-            error={passValidation(password)}
-          />
-          <div>Confirm password:</div>
-          <PasswordInput
-            onPasswordVisibleChange={(visible) => {
-              visibilityHandler(visible, 'confirmPassword');
-            }}
-            value={confirmPassword}
-            name="confirmPassword"
-            onChange={inputsChangeHandler}
-            success={confirmPassword.length > 0 && password === confirmPassword}
-            block
-            className={styles.input}
-            error={confPassValidation(password, confirmPassword)}
-          />
-        </div>
-        <div className={styles.buttonsBlock}>
+    <div className={cn('container', styles.root)}>
+      <div className={cn(styles.wrap, 'form-wrap')}>
+        <Typography.Title className={cn('form-title')} tag="h1" view="small">
+          It-incubator
+        </Typography.Title>
+        <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
+          Sign Up
+        </Typography.Title>
+        <Input
+          name="email"
+          value={email}
+          onChange={inputsChangeHandler}
+          type="email"
+          placeholder="email"
+          className={styles.input}
+          error={emailValidation(email)}
+        />
+        <PasswordInput
+          value={password}
+          placeholder="password"
+          name="password"
+          onChange={inputsChangeHandler}
+          success={passCheck()}
+          block
+          className={styles.input}
+          error={passValidation(password)}
+        />
+        <PasswordInput
+          value={confirmPassword}
+          placeholder="confirm password"
+          name="confirmPassword"
+          onChange={inputsChangeHandler}
+          success={confirmPassword.length > 0 && password === confirmPassword}
+          block
+          className={styles.input}
+          error={confPassValidation(password, confirmPassword)}
+        />
+        <div className={styles.footer}>
           <Link to="/login">
-            <Button size={'s'} view="secondary">
+            <Button size="s" view="secondary">
               Cancel
             </Button>
           </Link>
-          <Button size={'s'} view="primary" disabled={!registerButtonValidation()} onClick={registerHandler}>
+          <Button size="s" view="primary" disabled={!registerButtonValidation()} onClick={registerHandler}>
             Register
           </Button>
         </div>
