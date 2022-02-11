@@ -32,7 +32,7 @@ export const PasswordRecovery = () => {
       .authForgot(email)
       .then(({ data }) => {
         setStep(2);
-        toast.success(data.info);
+        toast.success(data.data.info);
       })
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
