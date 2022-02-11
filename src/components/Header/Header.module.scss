@@ -12,4 +12,12 @@
   align-items: center;
   justify-content: space-between;
   min-height: 40px;
+
+  @include media($sm) {
+    overflow: auto;
+  }
+}
+
+.link {
+  padding: 0 4px;
 }
