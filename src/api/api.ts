@@ -33,7 +33,9 @@ export const api = {
       rememberMe,
     });
   },
-
+  logout() {
+    return instance.delete<AuthForgotRT>(`auth/me`);
+  },
   register(email: string, password: string) {
     return instance.post(`auth/register`, { email, password });
   },

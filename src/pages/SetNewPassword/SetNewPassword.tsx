@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import { Typography } from '@alfalab/core-components/typography';
 import { PasswordInput } from '@alfalab/core-components/password-input';
@@ -10,8 +10,10 @@ import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './SetNewPassword.module.scss';
+import { useAppSelector } from '../../redux/hooks';
 
 export const SetNewPassword = () => {
+  const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
   const { token } = useParams();
   let navigate = useNavigate();
 
@@ -32,6 +34,7 @@ export const SetNewPassword = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
+  if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
     <div className={cn('container', styles.root)}>

@@ -24,7 +24,7 @@ export const Header = () => {
         <Link className={styles.link} to="/password-recovery">
           <LinkUI Component="span">PasswordRecovery</LinkUI>
         </Link>
-        <Link className={styles.link} to="/set-new-password">
+        <Link className={styles.link} to="/set-new-password/testURL">
           <LinkUI Component="span">SetNewPassword</LinkUI>
         </Link>
       </div>

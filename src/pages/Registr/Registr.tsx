@@ -7,12 +7,14 @@ import { Typography } from '@alfalab/core-components/typography';
 
 import styles from './Registr.module.scss';
 import { api } from '../../api';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@alfalab/core-components/button';
 import * as CONSTANTS from '../../helpers/constants';
 import * as RE from '../../helpers/regularExpressions';
+import { useAppSelector } from '../../redux/hooks';
 
 export const Registr = () => {
+  const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
@@ -80,6 +82,8 @@ export const Registr = () => {
     setPassword('');
     setConfirmPassword('');
   };
+
+  if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
     <div className={cn('container', styles.root)}>

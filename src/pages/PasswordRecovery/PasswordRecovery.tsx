@@ -1,7 +1,7 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import { Input } from '@alfalab/core-components/input';
 import { Button } from '@alfalab/core-components/button';
@@ -12,8 +12,10 @@ import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './PasswordRecovery.module.scss';
+import { useAppSelector } from '../../redux/hooks';
 
 export const PasswordRecovery = () => {
+  const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
   const [step, setStep] = useState<1 | 2>(1);
   const [email, setEmail] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
@@ -34,6 +36,7 @@ export const PasswordRecovery = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
+  if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
     <div className={cn('container', styles.root)}>
