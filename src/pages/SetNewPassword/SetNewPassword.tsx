@@ -8,9 +8,9 @@ import { PasswordInput } from '@alfalab/core-components/password-input';
 import { Button } from '@alfalab/core-components/button';
 import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
+import { useAppSelector } from '../../redux/hooks';
 
 import styles from './SetNewPassword.module.scss';
-import { useAppSelector } from '../../redux/hooks';
 
 export const SetNewPassword = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);

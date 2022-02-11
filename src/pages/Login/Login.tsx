@@ -1,19 +1,20 @@
 import React from 'react';
 import cn from 'classnames';
+import { Link, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import { useAppSelector } from '../../redux/hooks';
-import { Link, Navigate } from 'react-router-dom';
 import { loginTC } from '../../redux/thunk/login-thunk';
-import { useDispatch } from 'react-redux';
 import { Input } from '@alfalab/core-components/input';
 import { Checkbox } from '@alfalab/core-components/checkbox';
-import { useFormik } from 'formik';
 import { Button } from '@alfalab/core-components/button';
 import { PasswordInput } from '@alfalab/core-components/password-input';
-import * as Yup from 'yup';
-import styles from './Login.module.scss';
 import { Typography } from '@alfalab/core-components/typography';
 import { Link as LinkUI } from '@alfalab/core-components/link/Component';
+
+import styles from './Login.module.scss';
 
 export const Login = () => {
   const { isLoggedIn, loading } = useAppSelector((state) => state.login);

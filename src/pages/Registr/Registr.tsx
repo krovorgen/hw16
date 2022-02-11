@@ -1,19 +1,19 @@
 import React, { ChangeEvent, useState } from 'react';
 import cn from 'classnames';
+import { toast } from 'react-toastify';
+import { Link, Navigate } from 'react-router-dom';
 
 import { Input } from '@alfalab/core-components/input';
 import { PasswordInput } from '@alfalab/core-components/password-input';
 import { Typography } from '@alfalab/core-components/typography';
-
-import styles from './Registr.module.scss';
-import { api } from '../../api';
-import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@alfalab/core-components/button';
+import { api } from '../../api';
 import * as CONSTANTS from '../../helpers/constants';
 import * as RE from '../../helpers/regularExpressions';
 import { useAppSelector } from '../../redux/hooks';
-import { toast } from 'react-toastify';
 import { catchHandler } from '../../helpers/catchHandler';
+
+import styles from './Registr.module.scss';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);

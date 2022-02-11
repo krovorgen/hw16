@@ -10,9 +10,9 @@ import { Typography } from '@alfalab/core-components/typography';
 import emailIcon from '../../images/email.svg';
 import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
+import { useAppSelector } from '../../redux/hooks';
 
 import styles from './PasswordRecovery.module.scss';
-import { useAppSelector } from '../../redux/hooks';
 
 export const PasswordRecovery = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);

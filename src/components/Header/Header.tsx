@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import cn from 'classnames';
+
 import { Link as LinkUI } from '@alfalab/core-components/link';
 
 import styles from './Header.module.scss';
-import cn from 'classnames';
 
 export const Header = () => {
   return (
