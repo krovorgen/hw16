@@ -15,6 +15,7 @@ import { Typography } from '@alfalab/core-components/typography';
 import { Link as LinkUI } from '@alfalab/core-components/link/Component';
 
 import styles from './Login.module.scss';
+import { RoutesEnum } from '../../helpers/routes';
 
 export const Login = () => {
   const { isLoggedIn, loading } = useAppSelector((state) => state.login);
@@ -35,7 +36,7 @@ export const Login = () => {
     },
   });
 
-  if (isLoggedIn) return <Navigate to="/" />;
+  if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
   return (
     <div className={cn('container', styles.root)}>
@@ -69,7 +70,7 @@ export const Login = () => {
               name="rememberMe"
               checked={loginForm.values.rememberMe}
               onChange={() => loginForm.setFieldValue('rememberMe', !loginForm.values.rememberMe)}
-              label={'Remember me'}
+              label="Remember me"
             />
             <Link to="/password-recovery">
               <LinkUI view="default" Component="span">

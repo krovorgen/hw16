@@ -11,6 +11,7 @@ import { catchHandler } from '../../helpers/catchHandler';
 import { useAppSelector } from '../../redux/hooks';
 
 import styles from './SetNewPassword.module.scss';
+import { RoutesEnum } from '../../helpers/routes';
 
 export const SetNewPassword = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
@@ -34,7 +35,7 @@ export const SetNewPassword = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
-  if (isLoggedIn) return <Navigate to="/" />;
+  if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
   return (
     <div className={cn('container', styles.root)}>

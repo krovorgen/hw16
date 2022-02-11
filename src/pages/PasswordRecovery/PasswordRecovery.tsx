@@ -13,6 +13,7 @@ import { catchHandler } from '../../helpers/catchHandler';
 import { useAppSelector } from '../../redux/hooks';
 
 import styles from './PasswordRecovery.module.scss';
+import { RoutesEnum } from '../../helpers/routes';
 
 export const PasswordRecovery = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
@@ -36,7 +37,7 @@ export const PasswordRecovery = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
-  if (isLoggedIn) return <Navigate to="/" />;
+  if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
   return (
     <div className={cn('container', styles.root)}>

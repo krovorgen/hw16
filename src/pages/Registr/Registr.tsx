@@ -14,6 +14,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './Registr.module.scss';
+import { RoutesEnum } from '../../helpers/routes';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
@@ -93,7 +94,7 @@ export const Registr = () => {
       .finally(() => setLoadingStatus(false));
   };
 
-  if (isLoggedIn) return <Navigate to="/" />;
+  if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
   return (
     <div className={cn('container', styles.root)}>

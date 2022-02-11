@@ -15,6 +15,7 @@ import { useAppSelector } from './redux/hooks';
 import { useDispatch } from 'react-redux';
 import { initializedTC } from './redux/thunk/app-thunk';
 import { Preloader } from './components/Preloader';
+import { RoutesEnum } from './helpers/routes';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -29,11 +30,11 @@ export const App = () => {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registr />} />
-        <Route path="/password-recovery" element={<PasswordRecovery />} />
-        <Route path="/set-new-password/:token" element={<SetNewPassword />} />
+        <Route path={RoutesEnum.Main} element={<Main />} />
+        <Route path={RoutesEnum.Login} element={<Login />} />
+        <Route path={RoutesEnum.Registration} element={<Registr />} />
+        <Route path={RoutesEnum.PasswordRecovery} element={<PasswordRecovery />} />
+        <Route path={RoutesEnum.SetNewPassword} element={<SetNewPassword />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
       <ToastContainer
