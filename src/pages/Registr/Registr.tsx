@@ -12,6 +12,8 @@ import { Button } from '@alfalab/core-components/button';
 import * as CONSTANTS from '../../helpers/constants';
 import * as RE from '../../helpers/regularExpressions';
 import { useAppSelector } from '../../redux/hooks';
+import { toast } from 'react-toastify';
+import { catchHandler } from '../../helpers/catchHandler';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
@@ -77,10 +79,15 @@ export const Registr = () => {
   };
 
   const registerHandler = () => {
-    api.register(email, password).then((data) => console.log(data.data));
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
+    api
+      .register(email, password)
+      .then(({ data }) => {
+        toast.success(data.info);
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+      })
+      .catch(catchHandler);
   };
 
   if (isLoggedIn) return <Navigate to="/" />;
