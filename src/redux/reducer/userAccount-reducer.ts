@@ -24,7 +24,7 @@ export const userAccountReducer = slice.reducer;
 
 export const { setUserAccountData, clearUserAccountData } = slice.actions;
 
-type InitialStateType = {
+export type InitialStateType = {
   _id: string;
   name: string;
 };

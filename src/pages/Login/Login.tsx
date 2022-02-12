@@ -16,6 +16,7 @@ import { Link as LinkUI } from '@alfalab/core-components/link/Component';
 
 import styles from './Login.module.scss';
 import { RoutesEnum } from '../../helpers/routes';
+import { setPacksTC } from '../../redux/thunk/packs-thunk';
 
 export const Login = () => {
   const { isLoggedIn, loading } = useAppSelector((state) => state.login);
@@ -36,7 +37,10 @@ export const Login = () => {
     },
   });
 
-  if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
+  if (isLoggedIn) {
+    dispatch(setPacksTC());
+    return <Navigate to={RoutesEnum.Main} />;
+  }
 
   return (
     <div className={cn('container', styles.root)}>
