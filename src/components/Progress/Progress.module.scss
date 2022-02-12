@@ -1,0 +1,79 @@
+@import "./src/scss/variables";
+@import "./src/scss/mixins";
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 2px;
+  appearance: none;
+  border: none;
+  font-size: 16px;
+  color: var(--button-primary-base-bg-color);
+  background-color: transparent;
+
+  &::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  &::-webkit-progress-value {
+    background-color: currentColor;
+    transition: background-color 0.2s;
+  }
+
+  &::-moz-progress-bar {
+    background-color: currentColor;
+    transition: background-color 0.2s;
+  }
+
+  &::-ms-fill {
+    border: none;
+    background-color: currentColor;
+    transition: background-color 0.2s;
+  }
+
+  &:indeterminate {
+    background-image:
+      linear-gradient(
+        to right,
+        transparent 50%,
+        currentColor 50%,
+        currentColor 60%,
+        transparent 60%,
+        transparent 71.5%,
+        currentColor 71.5%,
+        currentColor 84%,
+        transparent 84%
+      );
+    background-size: 200% 100%;
+    animation: progress 2s infinite linear;
+  }
+
+  &:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  &:indeterminate::-ms-fill {
+    animation-name: none;
+  }
+}
+
+@keyframes progress {
+  0% {
+    background-position: left -31.25% top 0%;
+    background-size: 200% 100%;
+  }
+
+  50% {
+    background-position: left -49% top 0%;
+    background-size: 800% 100%;
+  }
+
+  100% {
+    background-position: left -102% top 0%;
+    background-size: 400% 100%;
+  }
+}

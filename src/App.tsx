@@ -16,10 +16,11 @@ import { useDispatch } from 'react-redux';
 import { initializedTC } from './redux/thunk/app-thunk';
 import { Preloader } from './components/Preloader';
 import { RoutesEnum } from './helpers/routes';
+import { Progress } from './components/Progress';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const initialized = useAppSelector((state) => state.app.initialized);
+  const { initialized, status } = useAppSelector((state) => state.app);
 
   useEffect(() => {
     dispatch(initializedTC());
@@ -28,6 +29,7 @@ export const App = () => {
   if (initialized) return <Preloader />;
   return (
     <>
+      {status === 'loading' && <Progress />}
       <Header />
       <Routes>
         <Route path={RoutesEnum.Main} element={<Main />} />
