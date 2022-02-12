@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
 import { Link, Navigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './Registr.module.scss';
 import { RoutesEnum } from '../../helpers/routes';
+import { REG_SUCCESS_NOTIFICATION } from '../../helpers/constants';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
@@ -22,6 +23,13 @@ export const Registr = () => {
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
+  const [passFocus, setPassFocus] = useState(false);
+  const [confPassFocus, setConfPassFocus] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passError, setPassError] = useState('');
+  const [confPassError, setConfPassError] = useState('');
+  const [regButtonStatus, setRegButtonStatus] = useState(true);
 
   const passCheck = () => {
     return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
@@ -45,22 +53,20 @@ export const Registr = () => {
       return CONSTANTS.REG_ERROR_EMPTY_PASS;
     } else if (pass.length > 0 && pass.length < 8) {
       return CONSTANTS.REG_ERROR_SHORT_PASS;
+    } else {
+      return '';
     }
   };
 
   const confPassValidation = (pass: string, confPass: string) => {
-    if (!passValidation(confPass)) {
-      if (pass !== confPass) {
-        return CONSTANTS.REG_ERROR_DIFF_PASS;
-      } else {
-        return '';
-      }
+    if (pass !== confPass) {
+      return CONSTANTS.REG_ERROR_DIFF_PASS;
     } else {
       return passValidation(confPass);
     }
   };
 
-  const registerButtonValidation = () => {
+  const regButtonValidation = () => {
     return emailValidation(email) === '' && confPassValidation(password, confirmPassword) === '';
   };
 
@@ -85,7 +91,7 @@ export const Registr = () => {
     api
       .register(email, password)
       .then(({ data }) => {
-        toast.success(data.info);
+        toast.success('' + data.addedUser.email + CONSTANTS.REG_SUCCESS_NOTIFICATION);
         setEmail('');
         setPassword('');
         setConfirmPassword('');
@@ -93,6 +99,54 @@ export const Registr = () => {
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
   };
+
+  const emailFocusHandler = () => {
+    setEmailFocus(true);
+  };
+
+  const passFocusHandler = () => {
+    setPassFocus(true);
+  };
+
+  const confPassFocusHandler = () => {
+    setConfPassFocus(true);
+  };
+
+  const emailBlurHandler = () => {
+    if (emailValidation(email) === '') {
+      setEmailError('');
+      setEmailFocus(false);
+    }
+  };
+
+  const passBlurHandler = () => {
+    if (passValidation(password) === '') {
+      setPassError('');
+      setPassFocus(false);
+    }
+  };
+
+  const confPassBlurHandler = () => {
+    if (confPassValidation(password, confirmPassword) === '') {
+      setConfPassError('');
+      setConfPassFocus(false);
+    }
+  };
+
+  useEffect(() => {
+    if (emailFocus) {
+      setEmailError(emailValidation(email));
+    }
+
+    if (passFocus) {
+      setPassError(passValidation(password));
+    }
+
+    if (confPassFocus) {
+      setConfPassError(confPassValidation(password, confirmPassword) as string);
+    }
+    setRegButtonStatus(!regButtonValidation());
+  }, [emailFocus, passFocus, confPassFocus, email, password, confirmPassword]);
 
   if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
@@ -112,7 +166,9 @@ export const Registr = () => {
           type="email"
           placeholder="email"
           className={styles.input}
-          error={emailValidation(email)}
+          error={emailError}
+          onFocus={emailFocusHandler}
+          onBlur={emailBlurHandler}
         />
         <PasswordInput
           value={password}
@@ -122,7 +178,9 @@ export const Registr = () => {
           success={passCheck()}
           block
           className={styles.input}
-          error={passValidation(password)}
+          error={passError}
+          onFocus={passFocusHandler}
+          onBlur={passBlurHandler}
         />
         <PasswordInput
           value={confirmPassword}
@@ -132,7 +190,9 @@ export const Registr = () => {
           success={confirmPassword.length > 0 && password === confirmPassword}
           block
           className={styles.input}
-          error={confPassValidation(password, confirmPassword)}
+          error={confPassError}
+          onFocus={confPassFocusHandler}
+          onBlur={confPassBlurHandler}
         />
         <div className={styles.footer}>
           <Link to="/login">
@@ -140,13 +200,7 @@ export const Registr = () => {
               Cancel
             </Button>
           </Link>
-          <Button
-            size="s"
-            view="primary"
-            loading={loadingStatus}
-            disabled={!registerButtonValidation()}
-            onClick={registerHandler}
-          >
+          <Button size="s" view="primary" loading={loadingStatus} disabled={regButtonStatus} onClick={registerHandler}>
             Register
           </Button>
         </div>
