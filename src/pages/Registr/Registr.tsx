@@ -15,7 +15,6 @@ import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './Registr.module.scss';
 import { RoutesEnum } from '../../helpers/routes';
-import { REG_SUCCESS_NOTIFICATION } from '../../helpers/constants';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
