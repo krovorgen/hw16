@@ -148,7 +148,7 @@ export const Registr = () => {
       setConfPassError(confPassValidation(password, confirmPassword) as string);
     }
     setRegButtonStatus(!regButtonValidation());
-  }, [emailFocus, passFocus, confPassFocus, email, password, confirmPassword]);
+  }, [emailFocus, passFocus, confPassFocus, email, password, confirmPassword, confPassValidation, regButtonValidation]);
 
   if (isLoggedIn) return <Navigate to={RoutesEnum.Main} />;
 
