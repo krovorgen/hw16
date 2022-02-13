@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import { Input } from '@alfalab/core-components/input';
 import { PasswordInput } from '@alfalab/core-components/password-input';
@@ -29,6 +29,8 @@ export const Registr = () => {
   const [passError, setPassError] = useState('');
   const [confPassError, setConfPassError] = useState('');
   const [regButtonStatus, setRegButtonStatus] = useState(true);
+
+  let navigate = useNavigate();
 
   const passCheck = () => {
     return password.length > 0 && confirmPassword.length > 0 && password === confirmPassword;
@@ -94,6 +96,7 @@ export const Registr = () => {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        navigate(RoutesEnum.Login);
       })
       .catch(catchHandler)
       .finally(() => setLoadingStatus(false));
