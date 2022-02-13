@@ -42,6 +42,9 @@ export const api = {
   authMe() {
     return instance.post(`auth/me`, {});
   },
+  getPack(data?: GetPackRequest) {
+    return instance.get<GetPackResponse>(`cards/pack`, { params: data });
+  },
 };
 
 type AuthForgotRT = {
@@ -66,4 +69,38 @@ type LoginResponseType = {
   verified: boolean;
   rememberMe: boolean;
   error?: string;
+};
+
+type GetPackRequest = {
+  packName?: string;
+  min?: string;
+  max?: string;
+  sortPacks?: string;
+  page?: string;
+  pageCount?: string;
+  user_id?: string;
+};
+
+export type GetPackResponse = {
+  cardPacks: CardPacksItem[];
+  cardPacksTotalCount: number;
+  maxCardsCount: number;
+  minCardsCount: number;
+  page: number;
+  pageCount: number;
+};
+
+export type CardPacksItem = {
+  _id: string;
+  user_id: string;
+  name: string;
+  path: string;
+  cardsCount: number;
+  grade: number;
+  shots: number;
+  rating: number;
+  type: string;
+  created: string;
+  updated: string;
+  __v: number;
 };
