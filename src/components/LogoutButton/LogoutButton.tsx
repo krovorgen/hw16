@@ -8,7 +8,6 @@ import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
 
 import styles from './LogoutButton.module.scss';
-import { clearUserAccountData } from '../../redux/reducer/userAccount-reducer';
 
 export const LogoutButton = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +18,6 @@ export const LogoutButton = () => {
       .then(({ data }) => {
         toast.success(data.info);
         dispatch(setIsLoggedIn(false));
-        dispatch(clearUserAccountData());
       })
       .catch(catchHandler);
   }, [dispatch]);
