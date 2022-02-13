@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { toast } from 'react-toastify';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -59,17 +59,17 @@ export const Registr = () => {
     }
   };
 
-  const confPassValidation = (pass: string, confPass: string) => {
+  const confPassValidation = useCallback((pass: string, confPass: string) => {
     if (pass !== confPass) {
       return CONSTANTS.REG_ERROR_DIFF_PASS;
     } else {
       return passValidation(confPass);
     }
-  };
+  }, []);
 
-  const regButtonValidation = () => {
+  const regButtonValidation = useCallback(() => {
     return emailValidation(email) === '' && confPassValidation(password, confirmPassword) === '';
-  };
+  }, [confPassValidation, email, password, confirmPassword]);
 
   const inputsChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     switch (event.currentTarget.name) {
