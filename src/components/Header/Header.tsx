@@ -11,7 +11,7 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div className={cn('container', styles.wrap)}>
-        <Link className={styles.link} to={RoutesEnum.Main}>
+        {/*<Link className={styles.link} to={RoutesEnum.Main}>
           <LinkUI Component="span">Main</LinkUI>
         </Link>
         <Link className={styles.link} to={RoutesEnum.Login}>
@@ -28,6 +28,9 @@ export const Header = () => {
         </Link>
         <Link className={styles.link} to={RoutesEnum.SetNewPassword}>
           <LinkUI Component="span">SetNewPassword</LinkUI>
+        </Link>*/}
+        <Link className={styles.link} to={RoutesEnum.Profile}>
+          <LinkUI Component="span">Profile</LinkUI>
         </Link>
       </div>
     </header>
