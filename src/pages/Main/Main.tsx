@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -41,7 +41,7 @@ export const Main = () => {
   useEffect(() => {
     dispatch(setCardPackTC());
   }, [dispatch, page, pageCount]);
-  console.log(Math.ceil(cardPacksTotalCount! / pageCount));
+
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
     <>
@@ -70,7 +70,10 @@ export const Main = () => {
           </Table.THead>
           <Table.TBody>
             {cardPack ? (
-              cardPack.length !== 0 && cardPack.map((item, index) => <TableItem item={item} key={index} />)
+              cardPack.length !== 0 &&
+              cardPack.map((item, index) => {
+                return <TableItem item={item} key={index} />;
+              })
             ) : (
               <Loader />
             )}
@@ -86,7 +89,7 @@ type TableItemProps = {
   item: CardPacksItem;
 };
 
-const TableItem: FC<TableItemProps> = ({ item }) => {
+const TableItem: FC<TableItemProps> = memo(({ item }) => {
   return (
     <Table.TRow>
       <Table.TCell>{item.name}</Table.TCell>
@@ -104,4 +107,4 @@ const TableItem: FC<TableItemProps> = ({ item }) => {
       </Table.TCell>
     </Table.TRow>
   );
-};
+});

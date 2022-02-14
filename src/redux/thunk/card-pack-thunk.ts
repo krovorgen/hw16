@@ -7,9 +7,10 @@ import { setCardPack } from '../reducer/card-pack-reducer';
 import { RootStateType } from '../store';
 
 export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
+  const { page, pageCount } = getState().cardPack;
   dispatch(setStatusAppAC('loading'));
   api
-    .getPack({ page: getState().cardPack.page, pageCount: getState().cardPack.pageCount })
+    .getPack({ page, pageCount })
     .then(({ data }) => {
       dispatch(setCardPack(data));
     })
