@@ -53,11 +53,13 @@ export const Main = () => {
         <Table
           pagination={
             <Table.Pagination
+              className={styles.pagination}
               perPage={perPage}
               currentPageIndex={currentPage}
               pagesCount={Math.ceil(cardPacksTotalCount! / pageCount)}
               onPageChange={handlePageChange}
               onPerPageChange={handlePerPageChange}
+              possiblePerPage={[5, 25, 50, 100]}
             />
           }
         >
