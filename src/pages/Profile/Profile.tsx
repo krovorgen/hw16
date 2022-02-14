@@ -15,17 +15,18 @@ export const Profile = () => {
 
   const dispatch = useAppDispatch();
 
-  /* const [avatar, setAvatar] = useState('');*/
+  const [avatar, setAvatar] = useState(profileAvatar);
   const [name, setName] = useState(profileName);
   const [editName, setEditName] = useState(false);
 
   const editNameHandler = () => setEditName(true);
+  const editAvatarHandler = () => setAvatar('');
 
   const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => setName(e.currentTarget.value.trim());
 
   const onSubmitName = () => {
-    if (name && name !== profileName) {
-      dispatch(updateProfileInfo({ name }));
+    if ((name && name !== profileName) || (avatar && avatar !== profileAvatar)) {
+      dispatch(updateProfileInfo({ name, avatar }));
     }
     if (name.trim() === '') {
       setName(profileName);
@@ -41,7 +42,7 @@ export const Profile = () => {
 
   const selectAllHandler = (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.select();
 
-  if (isLoggedIn) {
+  if (!isLoggedIn) {
     return <Navigate to={'/login'} />;
   }
 
@@ -53,6 +54,7 @@ export const Profile = () => {
           src={profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'}
           alt="avatar"
         />
+        <button onClick={editAvatarHandler}>Change avatar</button>
       </div>
       <div>
         {editName ? (
