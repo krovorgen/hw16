@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import { Link as LinkUI } from '@alfalab/core-components/link';
+import { RoutesEnum } from '../../helpers/routes';
 
 import styles from './Header.module.scss';
-import { RoutesEnum } from '../../helpers/routes';
 
 export const Header = () => {
   return (
