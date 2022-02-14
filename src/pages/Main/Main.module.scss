@@ -1,2 +1,26 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.addItem {
+  display: flex;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.input {
+  margin-right: 8px;
+  width: 100%;
+}
+
+.pagination {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+}

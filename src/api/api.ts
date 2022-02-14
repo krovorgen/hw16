@@ -17,10 +17,7 @@ export const api = {
       email,
       from: 'friday-super-team <friday-super-team@yandex.by>',
       message: `
-      <div style="background-color: #0f0; padding: 15px">
-        password recovery link:
-        <a href='${BASE_URL}/set-new-password/$token$'>link</a>
-	    </div>`,
+      <div style="background-color: #0f0; padding: 15px"...>`
     });
   },
   setNewPassword(password: string, resetPasswordToken: string) {
@@ -33,14 +30,15 @@ export const api = {
       rememberMe,
     });
   },
-
   register(email: string, password: string) {
     return instance.post(`auth/register`, { email, password });
   },
   authMe() {
     return instance.post(`auth/me`, {});
   },
-  logout() {
+  getPack(data?: GetPackRequest) {
+    return instance.get<GetPackResponse>(`cards/pack`, { params: data });
+  },logout() {
     return instance.delete<{}, AxiosResponse<InfoResponseType>>(`auth/me`);
   },
   mePut(data: MePutRequestType) {
@@ -72,6 +70,39 @@ type LoginResponseType = {
   error?: string;
 };
 
+type GetPackRequest = {
+  packName?: string;
+  min?: string;
+  max?: string;
+  sortPacks?: string;
+  page?: number;
+  pageCount?: number;
+  user_id?: string;
+};
+
+export type GetPackResponse = {
+  cardPacks: CardPacksItem[];
+  cardPacksTotalCount: number;
+  maxCardsCount: number;
+  minCardsCount: number;
+  page: number;
+  pageCount: number;
+};
+
+export type CardPacksItem = {
+  _id: string;
+  user_id: string;
+  name: string;
+  path: string;
+  cardsCount: number;
+  grade: number;
+  shots: number;
+  rating: number;
+  type: string;
+  created: string;
+  updated: string;
+  __v: number;
+};
 export type InfoResponseType = {
   info: string;
   error: string;
@@ -101,4 +132,3 @@ export type MePutResponseType = {
   updatedUser: UserResponseType;
   error?: string;
 };
-
