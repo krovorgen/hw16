@@ -17,6 +17,7 @@ import styles from './Main.module.scss';
 import { CardPacksItem } from '../../api';
 import { Input } from '@alfalab/core-components/input';
 import PaymentPlusMWhiteIcon from '@alfalab/icons-classic/PaymentPlusMWhiteIcon';
+import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,13 @@ export const Main = () => {
   return (
     <>
       <div className={cn('container', styles.root)}>
+        <div>
+          <MultiRangeSlider
+            max={3000}
+            callback={(selectedMin, selectedMax) => console.log('' + selectedMin + '---' + selectedMax)}
+          />
+        </div>
+
         <div className={styles.addItem}>
           <Input label="Новая колода" size="s" className={styles.input} />
           <Button view="primary" size="s" leftAddons={<PaymentPlusMWhiteIcon />} className={styles.button} />
