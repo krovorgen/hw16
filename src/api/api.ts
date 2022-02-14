@@ -17,7 +17,7 @@ export const api = {
       email,
       from: 'friday-super-team <friday-super-team@yandex.by>',
       message: `
-      <div style="background-color: #0f0; padding: 15px"...>`
+      <div style="background-color: #0f0; padding: 15px">`,
     });
   },
   setNewPassword(password: string, resetPasswordToken: string) {
@@ -38,7 +38,8 @@ export const api = {
   },
   getPack(data?: GetPackRequest) {
     return instance.get<GetPackResponse>(`cards/pack`, { params: data });
-  },logout() {
+  },
+  logout() {
     return instance.delete<{}, AxiosResponse<InfoResponseType>>(`auth/me`);
   },
   mePut(data: MePutRequestType) {
