@@ -47,7 +47,7 @@ export const Main = () => {
     <>
       <div className={cn('container', styles.root)}>
         <div className={styles.addItem}>
-          <Input label="Новая колода" size="s" className={styles.input} />
+          <Input label="New pack" size="s" className={styles.input} />
           <Button view="primary" size="s" leftAddons={<PaymentPlusMWhiteIcon />} className={styles.button} />
         </div>
         <Table
@@ -73,7 +73,7 @@ export const Main = () => {
           <Table.TBody>
             {cardPack ? (
               cardPack.length !== 0 &&
-              cardPack.map((item, index) => {
+              cardPack.map((item: CardPacksItem, index: number) => {
                 return <TableItem item={item} key={index} />;
               })
             ) : (
