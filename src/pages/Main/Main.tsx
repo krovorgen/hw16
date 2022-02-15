@@ -41,8 +41,8 @@ export const Main = () => {
   };
 
   useEffect(() => {
-    dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount]);
+    isLoggedIn && dispatch(setCardPackTC());
+  }, [dispatch, page, pageCount, isLoggedIn]);
 
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
