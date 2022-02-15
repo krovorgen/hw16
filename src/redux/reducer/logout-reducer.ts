@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const logoutSlice = createSlice({
   name: 'logout',
-  initialState: {}, //todo type of initial state of Login
+  initialState: {},
   reducers: {
-    setProfileDeleteData(state) {},
+    setProfileDeleteData() {},
   },
 });
 
