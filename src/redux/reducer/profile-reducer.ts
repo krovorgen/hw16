@@ -3,8 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const profileSlice = createSlice({
   name: 'profile',
-  initialState: {} as profileInitialStateType,
+  initialState: {} as ProfileInitialStateType,
   reducers: {
+    authProfileData(state, action: PayloadAction<ProfileInitialStateType>) {
+      state.email = action.payload.email;
+      state.name = action.payload.name;
+      state.avatar = action.payload.avatar;
+
+      console.log(action.payload);
+      //state.avatar = action.payload;
+    },
+
     updateProfileData(state, action: PayloadAction<{ text: string; avatar: string }>) {
       state.name = action.payload.text;
       state.avatar = action.payload.avatar;
@@ -14,9 +23,9 @@ const profileSlice = createSlice({
 
 export default profileSlice.reducer;
 
-export const { updateProfileData } = profileSlice.actions;
+export const { updateProfileData, authProfileData } = profileSlice.actions;
 
-export type profileInitialStateType = {
+export type ProfileInitialStateType = {
   _id: string;
   email: string;
   name: string;

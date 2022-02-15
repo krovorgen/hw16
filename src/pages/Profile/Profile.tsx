@@ -6,6 +6,7 @@ import { updateProfileInfo } from '../../redux/thunk/profile-thunks';
 import { Logout } from '../../components/logout';
 import { logout } from '../../redux/thunk/logout-thunk';
 import { Navigate } from 'react-router-dom';
+import { Typography } from '@alfalab/core-components/typography';
 
 export const Profile = () => {
   const profileName = useAppSelector((store) => store.profile.name);
@@ -48,7 +49,13 @@ export const Profile = () => {
 
   return (
     <div className={cn('container', styles.root)}>
-      <div> Personal Information</div>
+      <Typography.Title className={cn('form-title')} tag="h1" view="small">
+        It-incubator
+      </Typography.Title>
+      <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
+        Personal Information
+      </Typography.Title>
+
       <div>
         <img
           src={profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'}
@@ -60,7 +67,7 @@ export const Profile = () => {
         {editName ? (
           <input type={'text'} value={name} onChange={changeNameHandler} onFocus={selectAllHandler} autoFocus />
         ) : (
-          <span> Name : {profileName}</span>
+          <span> Nickname : {profileName}</span>
         )}
       </div>
       <div>Email: {profileEmail}</div>
