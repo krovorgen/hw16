@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Input } from '@alfalab/core-components/input';
@@ -24,7 +24,8 @@ export const AddCardForm = () => {
     setNewCardValue(e.currentTarget.value);
   };
 
-  const postNewCard = () => {
+  const postNewCard = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(setStatusAppAC('loading'));
     api
       .postPack({ name: newCardValue, private: privateStatus })
@@ -36,7 +37,7 @@ export const AddCardForm = () => {
       .finally(() => dispatch(setStatusAppAC('idle')));
   };
   return (
-    <form className={styles.root}>
+    <form className={styles.root} onSubmit={postNewCard}>
       <div className={styles.addItem}>
         <Input
           label="Новая колода"
@@ -51,7 +52,7 @@ export const AddCardForm = () => {
           size="s"
           leftAddons={<PaymentPlusMWhiteIcon />}
           className={styles.button}
-          onClick={postNewCard}
+          type="submit"
         />
       </div>
       <Switch checked={privateStatus} label="Приватная колода" onChange={handleChange} />
