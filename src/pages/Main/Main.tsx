@@ -12,12 +12,11 @@ import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
 import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
+import { CardPacksItem } from '../../api';
+import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 
 import styles from './Main.module.scss';
-import { CardPacksItem } from '../../api';
-import { Input } from '@alfalab/core-components/input';
-import PaymentPlusMWhiteIcon from '@alfalab/icons-classic/PaymentPlusMWhiteIcon';
-import { MultiRangeSlider } from '../../components/MultiRangeSlider';
+import { AddCardForm } from './AddCardForm';
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -29,11 +28,13 @@ export const Main = () => {
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
+
   const handlePerPageChange = (value: number) => {
     dispatch(changeResponseValue({ page: 0, pageCount: value }));
     setCurrentPage(0);
     setPerPage(value);
   };
+
   const handlePageChange = (pageIndex: number) => {
     dispatch(changeResponseValue({ page: pageIndex }));
     setCurrentPage(pageIndex);
@@ -54,10 +55,8 @@ export const Main = () => {
           />
         </div>
 
-        <div className={styles.addItem}>
-          <Input label="Новая колода" size="s" className={styles.input} />
-          <Button view="primary" size="s" leftAddons={<PaymentPlusMWhiteIcon />} className={styles.button} />
-        </div>
+        <AddCardForm />
+
         <Table
           pagination={
             <Table.Pagination
