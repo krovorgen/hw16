@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -12,13 +12,11 @@ import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
 import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
+import { CardPacksItem } from '../../api';
+import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 
 import styles from './Main.module.scss';
-import { api, CardPacksItem } from '../../api';
-import { Input } from '@alfalab/core-components/input';
-import PaymentPlusMWhiteIcon from '@alfalab/icons-classic/PaymentPlusMWhiteIcon';
-import { MultiRangeSlider } from '../../components/MultiRangeSlider';
-import { setStatusAppAC } from '../../redux/reducer/app-reducer';
+import { AddCardForm } from './AddCardForm';
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -30,7 +28,6 @@ export const Main = () => {
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
-  const [newCardValue, setNewCardValue] = useState('');
 
   const handlePerPageChange = (value: number) => {
     dispatch(changeResponseValue({ page: 0, pageCount: value }));
@@ -41,21 +38,6 @@ export const Main = () => {
   const handlePageChange = (pageIndex: number) => {
     dispatch(changeResponseValue({ page: pageIndex }));
     setCurrentPage(pageIndex);
-  };
-
-  const handleNewCardValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewCardValue(e.currentTarget.value);
-  };
-
-  const postNewCard = () => {
-    dispatch(setStatusAppAC('loading'));
-    api
-      .postPack({ name: newCardValue })
-      .then(() => {
-        dispatch(setCardPackTC());
-        setNewCardValue('');
-      })
-      .finally(() => dispatch(setStatusAppAC('idle')));
   };
 
   useEffect(() => {
@@ -73,22 +55,8 @@ export const Main = () => {
           />
         </div>
 
-        <div className={styles.addItem}>
-          <Input
-            label="Новая колода"
-            size="s"
-            className={styles.input}
-            value={newCardValue}
-            onChange={handleNewCardValue}
-          />
-          <Button
-            view="primary"
-            size="s"
-            leftAddons={<PaymentPlusMWhiteIcon />}
-            className={styles.button}
-            onClick={postNewCard}
-          />
-        </div>
+        <AddCardForm />
+
         <Table
           pagination={
             <Table.Pagination
