@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -14,10 +14,11 @@ import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
 
 import styles from './Main.module.scss';
-import { CardPacksItem } from '../../api';
+import { api, CardPacksItem } from '../../api';
 import { Input } from '@alfalab/core-components/input';
 import PaymentPlusMWhiteIcon from '@alfalab/icons-classic/PaymentPlusMWhiteIcon';
 import { MultiRangeSlider } from '../../components/MultiRangeSlider';
+import { setStatusAppAC } from '../../redux/reducer/app-reducer';
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -29,14 +30,32 @@ export const Main = () => {
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
+  const [newCardValue, setNewCardValue] = useState('');
+
   const handlePerPageChange = (value: number) => {
     dispatch(changeResponseValue({ page: 0, pageCount: value }));
     setCurrentPage(0);
     setPerPage(value);
   };
+
   const handlePageChange = (pageIndex: number) => {
     dispatch(changeResponseValue({ page: pageIndex }));
     setCurrentPage(pageIndex);
+  };
+
+  const handleNewCardValue = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewCardValue(e.currentTarget.value);
+  };
+
+  const postNewCard = () => {
+    dispatch(setStatusAppAC('loading'));
+    api
+      .postPack({ name: newCardValue })
+      .then(() => {
+        dispatch(setCardPackTC());
+        setNewCardValue('');
+      })
+      .finally(() => dispatch(setStatusAppAC('idle')));
   };
 
   useEffect(() => {
@@ -55,8 +74,20 @@ export const Main = () => {
         </div>
 
         <div className={styles.addItem}>
-          <Input label="Новая колода" size="s" className={styles.input} />
-          <Button view="primary" size="s" leftAddons={<PaymentPlusMWhiteIcon />} className={styles.button} />
+          <Input
+            label="Новая колода"
+            size="s"
+            className={styles.input}
+            value={newCardValue}
+            onChange={handleNewCardValue}
+          />
+          <Button
+            view="primary"
+            size="s"
+            leftAddons={<PaymentPlusMWhiteIcon />}
+            className={styles.button}
+            onClick={postNewCard}
+          />
         </div>
         <Table
           pagination={
