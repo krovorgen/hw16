@@ -12,11 +12,11 @@ import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
 import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
+import { CardPacksItem } from '../../api';
+import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 
 import styles from './Main.module.scss';
-import { CardPacksItem } from '../../api';
-import { Input } from '@alfalab/core-components/input';
-import PaymentPlusMWhiteIcon from '@alfalab/icons-classic/PaymentPlusMWhiteIcon';
+import { AddCardForm } from './AddCardForm';
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -28,28 +28,35 @@ export const Main = () => {
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
+
   const handlePerPageChange = (value: number) => {
     dispatch(changeResponseValue({ page: 0, pageCount: value }));
     setCurrentPage(0);
     setPerPage(value);
   };
+
   const handlePageChange = (pageIndex: number) => {
     dispatch(changeResponseValue({ page: pageIndex }));
     setCurrentPage(pageIndex);
   };
 
   useEffect(() => {
-    dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount]);
+    isLoggedIn && dispatch(setCardPackTC());
+  }, [dispatch, page, pageCount, isLoggedIn]);
 
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
     <>
       <div className={cn('container', styles.root)}>
-        <div className={styles.addItem}>
-          <Input label="New pack" size="s" className={styles.input} />
-          <Button view="primary" size="s" leftAddons={<PaymentPlusMWhiteIcon />} className={styles.button} />
+        <div>
+          <MultiRangeSlider
+            max={3000}
+            callback={(selectedMin, selectedMax) => console.log('' + selectedMin + '---' + selectedMax)}
+          />
         </div>
+
+        <AddCardForm />
+
         <Table
           pagination={
             <Table.Pagination
@@ -73,7 +80,7 @@ export const Main = () => {
           <Table.TBody>
             {cardPack ? (
               cardPack.length !== 0 &&
-              cardPack.map((item: CardPacksItem, index: number) => {
+              cardPack.map((item, index) => {
                 return <TableItem item={item} key={index} />;
               })
             ) : (

@@ -17,7 +17,10 @@ export const api = {
       email,
       from: 'friday-super-team <friday-super-team@yandex.by>',
       message: `
-      <div style="background-color: #0f0; padding: 15px">`,
+      <div style="background-color: #0f0; padding: 15px">
+        password recovery link:
+        <a href='https://hw16.vercel.app/set-new-password/$token$'>link</a>
+	    </div>`,
     });
   },
   setNewPassword(password: string, resetPasswordToken: string) {
@@ -30,6 +33,9 @@ export const api = {
       rememberMe,
     });
   },
+  logout() {
+    return instance.delete<AuthForgotRT>(`auth/me`);
+  },
   register(email: string, password: string) {
     return instance.post(`auth/register`, { email, password });
   },
@@ -39,11 +45,11 @@ export const api = {
   getPack(data?: GetPackRequest) {
     return instance.get<GetPackResponse>(`cards/pack`, { params: data });
   },
-  logout() {
-    return instance.delete<{}, AxiosResponse<InfoResponseType>>(`auth/me`);
-  },
   mePut(data: MePutRequestType) {
     return instance.put<MePutRequestType, AxiosResponse<MePutResponseType>>(`auth/me`, data);
+  },
+  postPack(cardsPack?: PostPackRequest) {
+    return instance.post(`cards/pack`, { cardsPack });
   },
 };
 
@@ -132,4 +138,15 @@ export type MePutRequestType = {
 export type MePutResponseType = {
   updatedUser: UserResponseType;
   error?: string;
+};
+
+export type PostPackRequest = {
+  name?: string; // если не отправить будет таким
+  path?: string; // если не отправить будет такой
+  grade?: number; // не обязателен
+  shots?: number; // не обязателен
+  rating?: number; // не обязателен
+  deckCover?: string; // не обязателен
+  private?: boolean; // если не отправить будет такой
+  type?: string; // если не отправить будет таким
 };
