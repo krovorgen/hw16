@@ -34,8 +34,8 @@ export const MultiRangeSlider = (props: propsType) => {
   };
 
   let leftRightStyle = { left: `${minVal}%`, right: `${100 - maxVal}%` };
-  let badgeMinStyle = { left: `calc(${minVal}% + (${-40 - minVal * 0.15}px))` };
-  let badgeMaxStyle = { left: `calc(${maxVal}% + (${-45 - maxVal * 0.15}px))` };
+  let badgeMinStyle = { left: `calc(${minVal}% + (${-40 - minVal * 0.2}px))` };
+  let badgeMaxStyle = { left: `calc(${maxVal}% + (${-40 - maxVal * 0.2}px))` };
 
   useEffect(() => {
     props.callback(converter(minVal), converter(maxVal));
