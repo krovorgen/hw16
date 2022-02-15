@@ -19,7 +19,7 @@ export const api = {
       message: `
       <div style="background-color: #0f0; padding: 15px">
         password recovery link:
-        <a href='https://hw16.vercel.app/set-new-password/$token$'>link</a>
+        <a href="https://hw16.vercel.app/set-new-password/$token$">link</a>
 	    </div>`,
     });
   },
@@ -41,6 +41,11 @@ export const api = {
   },
   authMe() {
     return instance.post(`auth/me`, {});
+  },
+  getCard(data: GetCardRequest) {
+    return instance.get<GetCardResponse>('cards/card', {
+      params: data,
+    });
   },
 };
 
@@ -66,4 +71,39 @@ type LoginResponseType = {
   verified: boolean;
   rememberMe: boolean;
   error?: string;
+};
+
+export type GetCardRequest = {
+  cardsPack_id: string;
+  cardAnswer?: string;
+  cardQuestion?: string;
+  min?: number;
+  max?: number;
+  sortCards?: string;
+  page?: number;
+  pageCount?: number;
+};
+
+export type CardItemType = {
+  _id: string;
+  cardsPack_id: string;
+  user_id: string;
+  answer: string;
+  question: string;
+  grade: number;
+  shots: number;
+  created: string;
+  updated: string;
+};
+
+type GetCardResponse = {
+  cards: CardItemType[];
+  packUserId: string;
+  page: number;
+  pageCount: number;
+  cardsTotalCount: number;
+  minGrade: number;
+  maxGrade: number;
+  token: string;
+  tokenDeathTime: number;
 };
