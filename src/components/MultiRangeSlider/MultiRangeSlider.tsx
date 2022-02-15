@@ -33,11 +33,9 @@ export const MultiRangeSlider = (props: propsType) => {
     }
   };
 
-  let intViewportWidth = window.innerWidth;
-
   let leftRightStyle = { left: `${minVal}%`, right: `${100 - maxVal}%` };
-  let badgeMinStyle = { left: `${minVal - minVal * 0.019 - 3.8}%` };
-  let badgeMaxStyle = { left: `${maxVal + 0.19 * maxVal - 0.000205 * intViewportWidth * maxVal}%` };
+  let badgeMinStyle = { left: `calc(${minVal}% + (${-40 - minVal * 0.15}px))` };
+  let badgeMaxStyle = { left: `calc(${maxVal}% + (${-45 - maxVal * 0.15}px))` };
 
   useEffect(() => {
     props.callback(converter(minVal), converter(maxVal));
