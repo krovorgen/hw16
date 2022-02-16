@@ -29,6 +29,9 @@ export const Header = () => {
         <Link className={styles.link} to={RoutesEnum.SetNewPassword}>
           <LinkUI Component="span">SetNewPassword</LinkUI>
         </Link>
+        <Link className={styles.link} to={RoutesEnum.Profile}>
+          <LinkUI Component="span">Profile</LinkUI>
+        </Link>
       </div>
     </header>
   );

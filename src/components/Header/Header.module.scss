@@ -2,6 +2,8 @@
 @import "./src/scss/mixins";
 
 .header {
+  position: sticky;
+  top: 0;
   background-color: #f8f8ff;
 }
 

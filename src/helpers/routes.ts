@@ -4,4 +4,5 @@ export enum RoutesEnum {
   Registration = '/registration',
   PasswordRecovery = '/password-recovery',
   SetNewPassword = '/set-new-password/:token',
+  Profile = '/profile',
 }

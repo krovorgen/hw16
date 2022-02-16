@@ -45,6 +45,9 @@ export const api = {
   getPack(data?: GetPackRequest) {
     return instance.get<GetPackResponse>(`cards/pack`, { params: data });
   },
+  mePut(data: MePutRequestType) {
+    return instance.put<MePutRequestType, AxiosResponse<MePutResponseType>>(`auth/me`, data);
+  },
   postPack(cardsPack?: PostPackRequest) {
     return instance.post(`cards/pack`, { cardsPack });
   },
@@ -106,6 +109,35 @@ export type CardPacksItem = {
   created: string;
   updated: string;
   __v: number;
+};
+export type InfoResponseType = {
+  info: string;
+  error: string;
+};
+
+export type UserResponseType = {
+  _id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  publicCardPacksCount: number;
+  created: Date;
+  updated: Date;
+  isAdmin: boolean;
+  verified: boolean;
+  rememberMe: boolean;
+  error: string;
+  token?: string;
+};
+
+export type MePutRequestType = {
+  name?: string;
+  avatar?: string;
+};
+
+export type MePutResponseType = {
+  updatedUser: UserResponseType;
+  error?: string;
 };
 
 export type PostPackRequest = {
