@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import { useAppSelector } from '../../redux/hooks';
-import { CardItemType } from '../../api';
+import { CardItemType, GetCardRequest } from '../../api';
 
 import styles from './Card.module.scss';
 import { Table } from '@alfalab/core-components/table';
@@ -12,6 +12,7 @@ import { Loader } from '@alfalab/core-components/loader';
 
 import dayjs from 'dayjs';
 import { getCard } from '../../redux/thunk/card-thunk';
+import { resetCard } from '../../redux/reducer/card-reducer';
 
 export const Card = () => {
   const dispatch = useDispatch();
@@ -23,21 +24,54 @@ export const Card = () => {
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
 
+  const [sortKey, setSortKey] = useState<string | undefined>(undefined);
+  const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(undefined);
+  const defaultIsSortedDesc = false;
+
   useEffect(() => {
     if (!id) return;
-    dispatch(getCard({ cardsPack_id: id, page: currentPage, pageCount: perPage, sortCards: '1grade' }));
-  }, [currentPage, perPage]);
+    const data: GetCardRequest = {
+      cardsPack_id: id,
+      page: currentPage,
+      pageCount: perPage,
+    };
+
+    if (isSortedDesc !== undefined) {
+      if (sortKey === 'grade') {
+        data.sortCards = `${isSortedDesc ? 1 : 0}${sortKey}`;
+      } else {
+        data.sortCards = `${isSortedDesc ? 0 : 1}${sortKey}`;
+      }
+    }
+
+    dispatch(getCard(data));
+  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetCard());
+    };
+  }, []);
 
   const handlePageChange = (pageIndex: number) => {
     setCurrentPage(pageIndex);
   };
 
   const handlePerPageChange = (value: number) => {
-    console.log('change per page', value);
     setPerPage(value);
   };
 
+  const handleSort = (key: string) => {
+    setSortKey(key);
+    if (isSortedDesc !== undefined) {
+      setIsSortedDesc(!isSortedDesc ? undefined : defaultIsSortedDesc);
+    } else {
+      setIsSortedDesc(!defaultIsSortedDesc);
+    }
+  };
+
   if (!isLoggedIn) return <Navigate to="/login" />;
+
   return (
     <>
       <div className={cn('container', styles.root)}>
@@ -55,10 +89,41 @@ export const Card = () => {
           }
         >
           <Table.THead className={styles.thead}>
-            <Table.THeadCell>Question</Table.THeadCell>
-            <Table.THeadCell>Answer</Table.THeadCell>
-            <Table.THeadCell>Last Updated</Table.THeadCell>
-            <Table.THeadCell>Grade</Table.THeadCell>
+            <Table.TSortableHeadCell
+              title="Question"
+              isSortedDesc={sortKey === 'question' ? isSortedDesc : undefined}
+              onSort={() => handleSort('question')}
+            >
+              Question
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              title="Answer"
+              isSortedDesc={sortKey === 'answer' ? isSortedDesc : undefined}
+              onSort={() => handleSort('answer')}
+            >
+              Answer
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              title="Created"
+              isSortedDesc={sortKey === 'created' ? isSortedDesc : undefined}
+              onSort={() => handleSort('created')}
+            >
+              Created
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              title="Last Updated"
+              isSortedDesc={sortKey === 'updated' ? isSortedDesc : undefined}
+              onSort={() => handleSort('updated')}
+            >
+              Last Updated
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              title="Grade"
+              isSortedDesc={sortKey === 'grade' ? isSortedDesc : undefined}
+              onSort={() => handleSort('grade')}
+            >
+              Grade
+            </Table.TSortableHeadCell>
           </Table.THead>
           <Table.TBody>
             {cards ? (
@@ -85,7 +150,8 @@ const TableItem: FC<TableItemProps> = memo(({ item }) => {
     <Table.TRow>
       <Table.TCell>{item.question}</Table.TCell>
       <Table.TCell>{item.answer}</Table.TCell>
-      <Table.TCell>{dayjs(item.updated).format('DD.MM.YY')}</Table.TCell>
+      <Table.TCell>{dayjs(item.created).format('DD.MM.YY HH:mm:ss')}</Table.TCell>
+      <Table.TCell>{dayjs(item.updated).format('DD.MM.YY HH:mm:ss')}</Table.TCell>
       <Table.TCell>{item.grade}</Table.TCell>
     </Table.TRow>
   );

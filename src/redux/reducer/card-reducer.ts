@@ -25,9 +25,12 @@ const slice = createSlice({
     setCardsTotalCount(state, action: PayloadAction<number>) {
       state.cardsTotalCount = action.payload;
     },
+    resetCard(state) {
+      state.cards = [];
+    },
   },
 });
 
-export const { setCard, setCardsTotalCount } = slice.actions;
+export const { setCard, setCardsTotalCount, resetCard } = slice.actions;
 
 export const cardReducer = slice.reducer;
