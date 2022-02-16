@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import moment from 'moment';
@@ -101,7 +101,9 @@ type TableItemProps = {
 const TableItem: FC<TableItemProps> = memo(({ item }) => {
   return (
     <Table.TRow>
-      <Table.TCell>{item.name}</Table.TCell>
+      <Table.TCell>
+        <Link to={`/card/${item._id}`}>{item.name}</Link>
+      </Table.TCell>
       <Table.TCell>{item.cardsCount}</Table.TCell>
       <Table.TCell>{moment(item.updated).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
       <Table.TCell>{moment(item.created).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
