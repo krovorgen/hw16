@@ -7,6 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
 import { Button } from '@alfalab/core-components/button';
 import { LogoutButton } from '../../components/LogoutButton';
+import { Input } from '@alfalab/core-components/input';
 
 export const Profile = () => {
   const profileName = useAppSelector((store) => store.profile.name);
@@ -21,6 +22,10 @@ export const Profile = () => {
   const [editName, setEditName] = useState(false);
 
   const editNameHandler = () => setEditName(true);
+  const cancelEditName = () => {
+    setEditName(false);
+    setName(profileName);
+  };
   const editAvatarHandler = () => setAvatar('');
 
   const changeNameHandler = (e: ChangeEvent<HTMLInputElement>) => setName(e.currentTarget.value.trim());
@@ -49,32 +54,58 @@ export const Profile = () => {
 
   return (
     <div className={cn('container', styles.root)}>
-      <Typography.Title className={cn('form-title')} tag="h1" view="small">
-        It-incubator
-      </Typography.Title>
-      <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
-        Personal Information
-      </Typography.Title>
+      <div className={cn(styles.wrap, 'form-wrap')}>
+        <Typography.Title className={cn('form-title')} tag="h1" view="small">
+          It-incubator
+        </Typography.Title>
+        <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
+          Personal Information
+        </Typography.Title>
 
-      <div>
-        <img
-          src={profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'}
-          alt="avatar"
-        />
-        <button onClick={editAvatarHandler}>Change avatar</button>
-      </div>
-      <div>
-        {editName ? (
-          <input type={'text'} value={name} onChange={changeNameHandler} onFocus={selectAllHandler} autoFocus />
-        ) : (
-          <span> Nickname : {profileName}</span>
-        )}
-      </div>
-      <div>Email: {profileEmail}</div>
-      <div>
-        <Button onClick={editNameHandler}>Edit</Button>
-        <Button onClick={onClickSaveHandler}>Save</Button>
-        <LogoutButton />
+        <div>
+          <img
+            src={profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'}
+            alt="avatar"
+          />
+          <button onClick={editAvatarHandler}>Change avatar</button>
+        </div>
+
+        <Typography.Text className={styles.descr} view="primary-small" tag="p">
+          Nickname:
+        </Typography.Text>
+
+        <div>
+          {editName ? (
+            <Input
+              type={'text'}
+              value={name}
+              onChange={changeNameHandler}
+              onFocus={selectAllHandler}
+              autoFocus
+              className={styles.input}
+            />
+          ) : (
+            <Typography.Text className={styles.descr} view="primary-medium" tag="p" onClick={editNameHandler}>
+              {profileName}
+            </Typography.Text>
+          )}
+        </div>
+        <Typography.Text className={styles.descr} view="primary-small" tag="p">
+          Email:
+        </Typography.Text>
+
+        <Typography.Text className={styles.descr} view="primary-medium" tag="p">
+          {profileEmail}
+        </Typography.Text>
+        <div>
+          <Button size="s" view="secondary" onClick={cancelEditName}>
+            Cancel
+          </Button>
+          <Button size="s" view="secondary" onClick={onClickSaveHandler}>
+            Save
+          </Button>
+          <LogoutButton />
+        </div>
       </div>
     </div>
   );
