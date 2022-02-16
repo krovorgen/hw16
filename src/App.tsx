@@ -40,7 +40,6 @@ export const App = () => {
         <Route path={RoutesEnum.PasswordRecovery} element={<PasswordRecovery />} />
         <Route path={RoutesEnum.SetNewPassword} element={<SetNewPassword />} />
         <Route path="*" element={<Error404 />} />
-        <Route path="/set-new-password/:token" element={<SetNewPassword />} />
       </Routes>
       <ToastContainer
         position="bottom-left"

@@ -29,7 +29,7 @@ export const SetNewPassword = () => {
     api
       .setNewPassword(formElements.password.value, token!)
       .then(({ data }) => {
-        toast.success(data.data.info);
+        toast.success(data.info);
         navigate(RoutesEnum.Login);
       })
       .catch(catchHandler)

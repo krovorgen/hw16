@@ -8,9 +8,9 @@ import { authProfileData } from '../reducer/profile-reducer';
 export const initializedTC = () => (dispatch: Dispatch) => {
   api
     .authMe()
-    .then((res) => {
+    .then(({ data }) => {
       dispatch(setIsLoggedIn(true));
-      dispatch(authProfileData(res.data));
+      dispatch(authProfileData(data));
     })
     .catch(catchHandler)
     .finally(() => dispatch(changeInitializedStatusAC(false)));

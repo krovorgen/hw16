@@ -44,69 +44,62 @@ export const Profile = () => {
     onSubmitName();
   };
 
-  /*  const onClickLogOutHandler = () => dispatch(logout());*/
-
-  const selectAllHandler = (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.select();
-
-  if (!isLoggedIn) {
-    return <Navigate to={'/login'} />;
-  }
+  if (!isLoggedIn) return <Navigate to={'/login'} />;
 
   return (
-    <div className={cn('container', styles.root)}>
-      <div className={cn(styles.wrap, 'form-wrap')}>
-        <Typography.Title className={cn('form-title')} tag="h1" view="small">
-          It-incubator
-        </Typography.Title>
-        <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
-          Personal Information
-        </Typography.Title>
+    <>
+      <div className={cn('container', styles.root)}>
+        <div className={cn(styles.wrap, 'form-wrap')}>
+          <Typography.Title className={cn('form-title')} tag="h1" view="small">
+            It-incubator
+          </Typography.Title>
+          <Typography.Title className={cn('form-subtitle')} tag="h2" view="xsmall">
+            Personal Information
+          </Typography.Title>
 
-        <div>
-          <img
-            src={profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'}
-            alt="avatar"
-          />
-          <button onClick={editAvatarHandler}>Change avatar</button>
-        </div>
-
-        <Typography.Text className={styles.descr} view="primary-small" tag="p">
-          Nickname:
-        </Typography.Text>
-
-        <div>
-          {editName ? (
-            <Input
-              type={'text'}
-              value={name}
-              onChange={changeNameHandler}
-              onFocus={selectAllHandler}
-              autoFocus
-              className={styles.input}
+          <div>
+            <img
+              src={
+                profileAvatar ? profileAvatar : 'http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png'
+              }
+              alt="avatar"
             />
-          ) : (
-            <Typography.Text className={styles.descr} view="primary-medium" tag="p" onClick={editNameHandler}>
-              {profileName}
-            </Typography.Text>
+            <button onClick={editAvatarHandler}>Change avatar</button>
+          </div>
+
+          <Typography.Text className={styles.descr} view="primary-small" tag="p">
+            Nickname:
+          </Typography.Text>
+
+          <div>
+            {editName ? (
+              <Input type={'text'} value={name} onChange={changeNameHandler} autoFocus className={styles.input} />
+            ) : (
+              <Typography.Text className={styles.descr} view="primary-medium" tag="p" onClick={editNameHandler}>
+                {profileName}
+              </Typography.Text>
+            )}
+          </div>
+          <Typography.Text className={styles.descr} view="primary-small" tag="p">
+            Email:
+          </Typography.Text>
+
+          <Typography.Text className={styles.descr} view="primary-medium" tag="p">
+            {profileEmail}
+          </Typography.Text>
+          {editName && (
+            <div>
+              <Button size="s" view="secondary" onClick={cancelEditName}>
+                Cancel
+              </Button>
+              <Button size="s" view="secondary" onClick={onClickSaveHandler}>
+                Save
+              </Button>
+            </div>
           )}
         </div>
-        <Typography.Text className={styles.descr} view="primary-small" tag="p">
-          Email:
-        </Typography.Text>
-
-        <Typography.Text className={styles.descr} view="primary-medium" tag="p">
-          {profileEmail}
-        </Typography.Text>
-        <div>
-          <Button size="s" view="secondary" onClick={cancelEditName}>
-            Cancel
-          </Button>
-          <Button size="s" view="secondary" onClick={onClickSaveHandler}>
-            Save
-          </Button>
-          <LogoutButton />
-        </div>
       </div>
-    </div>
+      <LogoutButton />
+    </>
   );
 };
