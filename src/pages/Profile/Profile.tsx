@@ -3,10 +3,10 @@ import cn from 'classnames';
 import styles from './Profile.module.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { updateProfileInfo } from '../../redux/thunk/profile-thunks';
-import { Logout } from '../../components/logout';
-import { logout } from '../../redux/thunk/logout-thunk';
 import { Navigate } from 'react-router-dom';
 import { Typography } from '@alfalab/core-components/typography';
+import { Button } from '@alfalab/core-components/button';
+import { LogoutButton } from '../../components/LogoutButton';
 
 export const Profile = () => {
   const profileName = useAppSelector((store) => store.profile.name);
@@ -39,7 +39,7 @@ export const Profile = () => {
     onSubmitName();
   };
 
-  const onClickLogOutHandler = () => dispatch(logout());
+  /*  const onClickLogOutHandler = () => dispatch(logout());*/
 
   const selectAllHandler = (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.select();
 
@@ -72,11 +72,9 @@ export const Profile = () => {
       </div>
       <div>Email: {profileEmail}</div>
       <div>
-        <button onClick={editNameHandler}>Edit</button>
-        <button onClick={onClickSaveHandler}>Save</button>
-        <button onClick={onClickLogOutHandler}>
-          <Logout />
-        </button>
+        <Button onClick={editNameHandler}>Edit</Button>
+        <Button onClick={onClickSaveHandler}>Save</Button>
+        <LogoutButton />
       </div>
     </div>
   );
