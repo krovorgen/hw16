@@ -42,6 +42,15 @@ export const api = {
   authMe() {
     return instance.post(`auth/me`, {});
   },
+  getPack(data?: GetPackRequest) {
+    return instance.get<GetPackResponse>(`cards/pack`, { params: data });
+  },
+  mePut(data: MePutRequestType) {
+    return instance.put<MePutRequestType, AxiosResponse<MePutResponseType>>(`auth/me`, data);
+  },
+  postPack(cardsPack?: PostPackRequest) {
+    return instance.post(`cards/pack`, { cardsPack });
+  },
 };
 
 type AuthForgotRT = {
@@ -66,4 +75,78 @@ type LoginResponseType = {
   verified: boolean;
   rememberMe: boolean;
   error?: string;
+};
+
+type GetPackRequest = {
+  packName?: string;
+  min?: string;
+  max?: string;
+  sortPacks?: string;
+  page?: number;
+  pageCount?: number;
+  user_id?: string;
+};
+
+export type GetPackResponse = {
+  cardPacks: CardPacksItem[];
+  cardPacksTotalCount: number;
+  maxCardsCount: number;
+  minCardsCount: number;
+  page: number;
+  pageCount: number;
+};
+
+export type CardPacksItem = {
+  _id: string;
+  user_id: string;
+  name: string;
+  path: string;
+  cardsCount: number;
+  grade: number;
+  shots: number;
+  rating: number;
+  type: string;
+  created: string;
+  updated: string;
+  __v: number;
+};
+export type InfoResponseType = {
+  info: string;
+  error: string;
+};
+
+export type UserResponseType = {
+  _id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  publicCardPacksCount: number;
+  created: Date;
+  updated: Date;
+  isAdmin: boolean;
+  verified: boolean;
+  rememberMe: boolean;
+  error: string;
+  token?: string;
+};
+
+export type MePutRequestType = {
+  name?: string;
+  avatar?: string;
+};
+
+export type MePutResponseType = {
+  updatedUser: UserResponseType;
+  error?: string;
+};
+
+export type PostPackRequest = {
+  name?: string; // если не отправить будет таким
+  path?: string; // если не отправить будет такой
+  grade?: number; // не обязателен
+  shots?: number; // не обязателен
+  rating?: number; // не обязателен
+  deckCover?: string; // не обязателен
+  private?: boolean; // если не отправить будет такой
+  type?: string; // если не отправить будет таким
 };
