@@ -9,6 +9,7 @@ const profileSlice = createSlice({
       state.email = action.payload.email;
       state.name = action.payload.name;
       state.avatar = action.payload.avatar;
+      state._id = action.payload._id;
     },
 
     updateProfileData(state, action: PayloadAction<{ text: string; avatar: string }>) {

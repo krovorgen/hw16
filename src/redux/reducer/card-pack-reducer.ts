@@ -4,18 +4,21 @@ import { GetPackResponse } from '../../api';
 export type ModelCardPackUpdate = {
   page?: number;
   pageCount?: number;
+  ownerCardPack?: boolean;
 };
 
 export type InitialStateType = {
   responseData: GetPackResponse | null;
   page: number;
   pageCount: number;
+  ownerCardPack: boolean;
 };
 
 const initialState: InitialStateType = {
   responseData: null,
   page: 0,
   pageCount: 5,
+  ownerCardPack: false,
 };
 
 const slice = createSlice({

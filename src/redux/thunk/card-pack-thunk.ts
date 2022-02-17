@@ -5,14 +5,28 @@ import { catchHandler } from '../../helpers/catchHandler';
 import { setStatusAppAC } from '../reducer/app-reducer';
 import { setCardPack } from '../reducer/card-pack-reducer';
 import { RootStateType } from '../store';
+import { toast } from 'react-toastify';
 
 export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
-  const { page, pageCount } = getState().cardPack;
+  const { page, pageCount, ownerCardPack } = getState().cardPack;
+  const { _id } = getState().profile;
   dispatch(setStatusAppAC('loading'));
   api
-    .getPack({ page, pageCount })
+    .getCardPack({ page, pageCount, user_id: ownerCardPack ? _id : undefined })
     .then(({ data }) => {
       dispatch(setCardPack(data));
+    })
+    .catch(catchHandler)
+    .finally(() => dispatch(setStatusAppAC('idle')));
+};
+
+export const deleteCardPackTC = (cardPackId: string) => (dispatch: any) => {
+  dispatch(setStatusAppAC('loading'));
+  api
+    .deleteCardPack(cardPackId)
+    .then(() => {
+      dispatch(setCardPackTC());
+      toast.success('card pack was deleted');
     })
     .catch(catchHandler)
     .finally(() => dispatch(setStatusAppAC('idle')));

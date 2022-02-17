@@ -28,7 +28,7 @@ export const AddCardForm = () => {
     e.preventDefault();
     dispatch(setStatusAppAC('loading'));
     api
-      .postPack({ name: newCardValue, private: privateStatus })
+      .postCardPack({ name: newCardValue, private: privateStatus })
       .then(() => {
         dispatch(setCardPackTC());
         setNewCardValue('');

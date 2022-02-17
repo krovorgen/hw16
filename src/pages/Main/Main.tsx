@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -7,42 +7,52 @@ import moment from 'moment';
 import { Button } from '@alfalab/core-components/button';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
+import { Switch } from '@alfalab/core-components/switch';
 
 import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
-import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
+import { deleteCardPackTC, setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
 import { CardPacksItem } from '../../api';
 import { MultiRangeSlider } from '../../components/MultiRangeSlider';
+import { AddCardForm } from './AddCardForm';
 
 import styles from './Main.module.scss';
-import { AddCardForm } from './AddCardForm';
 
 export const Main = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const cardPack = useAppSelector((state) => state.cardPack.responseData?.cardPacks);
-  const cardPacksTotalCount = useAppSelector((state) => state.cardPack.responseData?.cardPacksTotalCount);
-  const { page, pageCount } = useAppSelector((state) => state.cardPack);
+  const userId = useAppSelector((state) => state.profile._id);
+  const { page, pageCount, ownerCardPack, responseData } = useAppSelector((state) => state.cardPack);
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
 
-  const handlePerPageChange = (value: number) => {
-    dispatch(changeResponseValue({ page: 0, pageCount: value }));
-    setCurrentPage(0);
-    setPerPage(value);
-  };
+  const handleChangeOwnerPack = useCallback(() => {
+    dispatch(changeResponseValue({ ownerCardPack: !ownerCardPack }));
+  }, [dispatch, ownerCardPack]);
 
-  const handlePageChange = (pageIndex: number) => {
-    dispatch(changeResponseValue({ page: pageIndex }));
-    setCurrentPage(pageIndex);
-  };
+  const handlePerPageChange = useCallback(
+    (value: number) => {
+      dispatch(changeResponseValue({ page: 0, pageCount: value }));
+      setCurrentPage(0);
+      setPerPage(value);
+    },
+    [dispatch]
+  );
+
+  const handlePageChange = useCallback(
+    (pageIndex: number) => {
+      dispatch(changeResponseValue({ page: pageIndex }));
+      setCurrentPage(pageIndex);
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn]);
+  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack]);
 
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
@@ -57,13 +67,15 @@ export const Main = () => {
 
         <AddCardForm />
 
+        <Switch checked={ownerCardPack} label="Мои колоды" onChange={handleChangeOwnerPack} />
+
         <Table
           pagination={
             <Table.Pagination
               className={styles.pagination}
               perPage={perPage}
               currentPageIndex={currentPage}
-              pagesCount={Math.ceil(cardPacksTotalCount! / pageCount)}
+              pagesCount={Math.ceil(responseData?.cardPacksTotalCount! / pageCount)}
               onPageChange={handlePageChange}
               onPerPageChange={handlePerPageChange}
               possiblePerPage={[5, 25, 50, 100]}
@@ -78,10 +90,10 @@ export const Main = () => {
             <Table.THeadCell>Actions</Table.THeadCell>
           </Table.THead>
           <Table.TBody>
-            {cardPack ? (
-              cardPack.length !== 0 &&
-              cardPack.map((item, index) => {
-                return <TableItem item={item} key={index} />;
+            {responseData?.cardPacks ? (
+              responseData.cardPacks.length !== 0 &&
+              responseData.cardPacks.map((item, index) => {
+                return <TableItem item={item} userId={userId} key={index} />;
               })
             ) : (
               <Loader />
@@ -96,9 +108,14 @@ export const Main = () => {
 
 type TableItemProps = {
   item: CardPacksItem;
+  userId: string;
 };
 
-const TableItem: FC<TableItemProps> = memo(({ item }) => {
+const TableItem: FC<TableItemProps> = memo(({ item, userId }) => {
+  const dispatch = useDispatch();
+  const deleteCardPack = useCallback(() => {
+    dispatch(deleteCardPackTC(item._id));
+  }, [dispatch, item._id]);
   return (
     <Table.TRow>
       <Table.TCell>
@@ -107,12 +124,16 @@ const TableItem: FC<TableItemProps> = memo(({ item }) => {
       <Table.TCell>{item.cardsCount}</Table.TCell>
       <Table.TCell>{moment(item.updated).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
       <Table.TCell>{moment(item.created).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
-      <Table.TCell>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button size="xxs" view="primary">
-            Delete
-          </Button>
-          <Button size="xxs">Edit</Button>
+      <Table.TCell className={styles.nav}>
+        <div className={styles.navWrap}>
+          {item.user_id === userId && (
+            <>
+              <Button size="xxs" view="primary" onClick={deleteCardPack}>
+                Delete
+              </Button>
+              <Button size="xxs">Edit</Button>
+            </>
+          )}
           <Button size="xxs">Learn</Button>
         </div>
       </Table.TCell>

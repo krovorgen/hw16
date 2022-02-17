@@ -42,13 +42,16 @@ export const api = {
   authMe() {
     return instance.post(`auth/me`, {});
   },
-  getPack(data?: GetPackRequest) {
+  getCardPack(data?: GetCardPackRequest) {
     return instance.get<GetPackResponse>(`cards/pack`, { params: data });
+  },
+  deleteCardPack(cardPackId: string) {
+    return instance.delete(`cards/pack`, { params: { id: cardPackId } });
   },
   mePut(data: MePutRequestType) {
     return instance.put<MePutRequestType, AxiosResponse<MePutResponseType>>(`auth/me`, data);
   },
-  postPack(cardsPack?: PostPackRequest) {
+  postCardPack(cardsPack?: PostCardPackRequest) {
     return instance.post(`cards/pack`, { cardsPack });
   },
 };
@@ -77,7 +80,7 @@ type LoginResponseType = {
   error?: string;
 };
 
-type GetPackRequest = {
+type GetCardPackRequest = {
   packName?: string;
   min?: string;
   max?: string;
@@ -110,6 +113,7 @@ export type CardPacksItem = {
   updated: string;
   __v: number;
 };
+
 export type InfoResponseType = {
   info: string;
   error: string;
@@ -140,7 +144,7 @@ export type MePutResponseType = {
   error?: string;
 };
 
-export type PostPackRequest = {
+export type PostCardPackRequest = {
   name?: string; // если не отправить будет таким
   path?: string; // если не отправить будет такой
   grade?: number; // не обязателен
