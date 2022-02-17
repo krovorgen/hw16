@@ -18,6 +18,7 @@ import { initializedTC } from './redux/thunk/app-thunk';
 import { Preloader } from './components/Preloader';
 import { RoutesEnum } from './helpers/routes';
 import { Progress } from './components/Progress';
+import { Card } from './pages/Card';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export const App = () => {
         <Route path={RoutesEnum.Registration} element={<Registr />} />
         <Route path={RoutesEnum.PasswordRecovery} element={<PasswordRecovery />} />
         <Route path={RoutesEnum.SetNewPassword} element={<SetNewPassword />} />
+        <Route path={RoutesEnum.Card} element={<Card />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
       <ToastContainer
