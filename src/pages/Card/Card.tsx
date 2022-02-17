@@ -17,6 +17,7 @@ import { resetCard } from '../../redux/reducer/card-reducer';
 import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 
 import { useDebounce } from 'use-debounce';
+import { NewCardCreator } from '../../components/NewCardCreator';
 
 export const Card = () => {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ export const Card = () => {
     <>
       <div className={cn('container', styles.root)}>
         <div className={styles.search}>
+          <NewCardCreator cardsPack_id={id!} />
           <Input
             label="Search..."
             name="search"

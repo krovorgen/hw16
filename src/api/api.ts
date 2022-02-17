@@ -59,6 +59,9 @@ export const api = {
   postCardPack(cardsPack?: PostCardPackRequest) {
     return instance.post(`cards/pack`, { cardsPack });
   },
+  createNewCard(card: createCardType) {
+    return instance.post(`cards/card`, { card });
+  },
 };
 
 type AuthForgotRT = {
@@ -193,4 +196,18 @@ type GetCardResponse = {
   maxGrade: number;
   token: string;
   tokenDeathTime: number;
+};
+
+export type createCardType = {
+  cardsPack_id: string;
+  question?: string; // если не отправить будет таким
+  answer?: string; // если не отправить будет таким
+  grade?: 0 | 1 | 2 | 3 | 4 | 5; // 0..5, не обязателен
+  shots?: number; // не обязателен
+  rating?: number; // не обязателен
+  answerImg?: string; // не обязателен
+  questionImg?: string; // не обязателен
+  questionVideo?: string; // не обязателен
+  answerVideo?: string; // не обязателен
+  type?: string; // если не отправить будет таким
 };
