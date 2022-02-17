@@ -4,7 +4,7 @@ import { api } from '../../api';
 import { catchHandler } from '../../helpers/catchHandler';
 import { setStatusAppAC } from '../reducer/app-reducer';
 import { setCardPack } from '../reducer/card-pack-reducer';
-import { RootStateType } from '../store';
+import { AppDispatch, RootStateType } from '../store';
 import { toast } from 'react-toastify';
 
 export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
@@ -20,7 +20,7 @@ export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStat
     .finally(() => dispatch(setStatusAppAC('idle')));
 };
 
-export const deleteCardPackTC = (cardPackId: string) => (dispatch: any) => {
+export const deleteCardPackTC = (cardPackId: string) => (dispatch: AppDispatch) => {
   dispatch(setStatusAppAC('loading'));
   api
     .deleteCardPack(cardPackId)
