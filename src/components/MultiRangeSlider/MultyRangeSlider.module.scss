@@ -5,11 +5,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 20px auto;
-  width: 90%;
-  height: 80px;
+  margin: 0 auto;
+  padding-top: 40px;
   font-weight: 700;
-  color: $mainColor;
+  color: var(--button-primary-base-bg-color);
 
   .badges {
     text-align: center;
@@ -26,8 +25,13 @@
       .underline {
         width: 20px;
         height: 3px;
-        background-color: $mainColor;
+        background-color: var(--button-primary-base-bg-color);
       }
+    }
+
+    .badgeMax {
+      z-index: 999;
+      background-color: #f8f9fe;
     }
   }
 
@@ -41,7 +45,7 @@
       position: absolute;
       top: -1px;
       height: 4px;
-      background-color: $mainColor;
+      background-color: var(--button-primary-base-bg-color);
     }
   }
 
@@ -66,8 +70,8 @@
       height: 20px;
       appearance: none;
       border-radius: 50%;
-      box-shadow: 0 0 3px 1px $mainColor;
-      background-color: $mainColor;
+      box-shadow: 0 0 3px 1px var(--button-primary-base-bg-color);
+      background-color: var(--button-primary-base-bg-color);
       pointer-events: auto;
     }
 
@@ -78,8 +82,8 @@
       height: 10px;
       appearance: none;
       border-radius: 50%;
-      box-shadow: 0 0 3px 1px $mainColor;
-      background-color: $mainColor;
+      box-shadow: 0 0 3px 1px var(--button-primary-base-bg-color);
+      background-color: var(--button-primary-base-bg-color);
       pointer-events: auto;
     }
   }
