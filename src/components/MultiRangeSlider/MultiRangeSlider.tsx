@@ -18,16 +18,16 @@ export const MultiRangeSlider = (props: propsType) => {
   );
 
   const changeHandlerMin = (event: ChangeEvent<HTMLInputElement>) => {
-    if (maxVal - 3 <= Number(event.currentTarget.value)) {
-      setMinVal(Number(maxVal - 3));
+    if (maxVal - 0.1 <= Number(event.currentTarget.value)) {
+      setMinVal(Number(maxVal - 0.1));
     } else {
       setMinVal(Number(event.currentTarget.value));
     }
   };
 
   const changeHandlerMax = (event: ChangeEvent<HTMLInputElement>) => {
-    if (Number(event.currentTarget.value) <= minVal + 3) {
-      setMaxVal(Number(minVal + 3));
+    if (Number(event.currentTarget.value) <= minVal + 0.1) {
+      setMaxVal(Number(minVal + 0.1));
     } else {
       setMaxVal(Number(event.currentTarget.value));
     }
