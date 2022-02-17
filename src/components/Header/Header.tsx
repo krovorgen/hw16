@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import { Link as LinkUI } from '@alfalab/core-components/link';
+import { RoutesEnum } from '../../helpers/routes';
 
 import styles from './Header.module.scss';
-import { RoutesEnum } from '../../helpers/routes';
 
 export const Header = () => {
   return (
@@ -29,8 +29,8 @@ export const Header = () => {
         <Link className={styles.link} to={RoutesEnum.SetNewPassword}>
           <LinkUI Component="span">SetNewPassword</LinkUI>
         </Link>
-        <Link className={styles.link} to={RoutesEnum.CardTest}>
-          <LinkUI Component="span">Card</LinkUI>
+        <Link className={styles.link} to={RoutesEnum.Profile}>
+          <LinkUI Component="span">Profile</LinkUI>
         </Link>
       </div>
     </header>

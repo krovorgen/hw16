@@ -1,2 +1,23 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.pagination {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+}
+
+.nav {
+  width: 310px;
+}
+
+.navWrap {
+  display: flex;
+  justify-content: space-between;
+}

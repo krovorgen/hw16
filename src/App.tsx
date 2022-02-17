@@ -9,6 +9,7 @@ import { Error404 } from './pages/Error404';
 import { PasswordRecovery } from './pages/PasswordRecovery';
 
 import { PingControl } from './components/PingControll';
+import { Profile } from './pages/Profile';
 import { SetNewPassword } from './pages/SetNewPassword';
 import { Header } from './components/Header';
 import { useAppSelector } from './redux/hooks';
@@ -34,6 +35,7 @@ export const App = () => {
       <Header />
       <Routes>
         <Route path={RoutesEnum.Main} element={<Main />} />
+        <Route path={RoutesEnum.Profile} element={<Profile />} />
         <Route path={RoutesEnum.Login} element={<Login />} />
         <Route path={RoutesEnum.Registration} element={<Registr />} />
         <Route path={RoutesEnum.PasswordRecovery} element={<PasswordRecovery />} />

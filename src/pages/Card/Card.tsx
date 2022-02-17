@@ -63,7 +63,7 @@ export const Card = () => {
     return () => {
       dispatch(resetCard());
     };
-  }, []);
+  }, [dispatch]);
 
   const handlePageChange = (pageIndex: number) => {
     setCurrentPage(pageIndex);
