@@ -3,16 +3,16 @@ import { api } from '../../api';
 import { setIsLoggedIn, setLoginLoading } from '../reducer/login-reducer';
 import { toast } from 'react-toastify';
 import { catchHandler } from '../../helpers/catchHandler';
-import { getAuthData } from './profile-thunks';
+import { authProfileData } from '../reducer/profile-reducer';
 
 export const loginTC = (email: string, password: string, rememberMe: boolean) => (dispatch: AppDispatch) => {
   dispatch(setLoginLoading(true));
 
   api
     .login(email, password, rememberMe)
-    .then(() => {
+    .then(({ data }) => {
       dispatch(setIsLoggedIn(true));
-      dispatch(getAuthData());
+      dispatch(authProfileData(data));
       toast.success('You have successfully logged in');
     })
     .catch(catchHandler)
