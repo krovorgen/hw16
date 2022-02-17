@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -12,7 +12,10 @@ import { Loader } from '@alfalab/core-components/loader';
 
 import dayjs from 'dayjs';
 import { getCard } from '../../redux/thunk/card-thunk';
+import { Input } from '@alfalab/core-components/input';
 import { resetCard } from '../../redux/reducer/card-reducer';
+
+import { useDebounce } from 'use-debounce';
 
 export const Card = () => {
   const dispatch = useDispatch();
@@ -28,8 +31,12 @@ export const Card = () => {
   const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(undefined);
   const defaultIsSortedDesc = false;
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [search] = useDebounce(searchTerm, 1000);
+
   useEffect(() => {
     if (!id) return;
+
     const data: GetCardRequest = {
       cardsPack_id: id,
       page: currentPage,
@@ -44,8 +51,12 @@ export const Card = () => {
       }
     }
 
+    if (search) {
+      data.cardQuestion = search;
+    }
+
     dispatch(getCard(data));
-  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc]);
+  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
 
   useEffect(() => {
     return () => {
@@ -70,11 +81,31 @@ export const Card = () => {
     }
   };
 
+  const handleChangeSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // const handleClearSearchTerm = (event: MouseEvent<HTMLButtonElement>) => {
+  //   setSearchTerm('');
+  // };
+
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
     <>
       <div className={cn('container', styles.root)}>
+        <div className={styles.search}>
+          <Input
+            label="Search..."
+            name="search"
+            value={searchTerm}
+            onChange={handleChangeSearchTerm}
+            clear
+            onClear={() => setSearchTerm('')}
+            block
+          />
+        </div>
+
         <Table
           pagination={
             <Table.Pagination
