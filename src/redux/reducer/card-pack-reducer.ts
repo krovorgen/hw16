@@ -5,6 +5,7 @@ export type ModelCardPackUpdate = {
   page?: number;
   pageCount?: number;
   ownerCardPack?: boolean;
+  searchValue?: string;
 };
 
 export type InitialStateType = {
@@ -12,6 +13,7 @@ export type InitialStateType = {
   page: number;
   pageCount: number;
   ownerCardPack: boolean;
+  searchValue: string;
 };
 
 const initialState: InitialStateType = {
@@ -19,6 +21,7 @@ const initialState: InitialStateType = {
   page: 0,
   pageCount: 5,
   ownerCardPack: false,
+  searchValue: '',
 };
 
 const slice = createSlice({

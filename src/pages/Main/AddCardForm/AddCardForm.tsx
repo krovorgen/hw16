@@ -17,7 +17,7 @@ export const AddCardForm = () => {
   const dispatch = useDispatch();
 
   const [newCardValue, setNewCardValue] = useState('');
-  const [privateStatus, setPrivateStatus] = React.useState(false);
+  const [privateStatus, setPrivateStatus] = useState(false);
   const handleChange = () => setPrivateStatus((v) => !v);
 
   const handleNewCardValue = (e: ChangeEvent<HTMLInputElement>) => {

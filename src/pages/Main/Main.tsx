@@ -7,7 +7,6 @@ import moment from 'moment';
 import { Button } from '@alfalab/core-components/button';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
-import { Switch } from '@alfalab/core-components/switch';
 
 import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
@@ -18,20 +17,17 @@ import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 import { AddCardForm } from './AddCardForm';
 
 import styles from './Main.module.scss';
+import { SearchForm } from './SearchForm';
 
 export const Main = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
   const userId = useAppSelector((state) => state.profile._id);
-  const { page, pageCount, ownerCardPack, responseData } = useAppSelector((state) => state.cardPack);
+  const { page, pageCount, ownerCardPack, responseData, searchValue } = useAppSelector((state) => state.cardPack);
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
-
-  const handleChangeOwnerPack = useCallback(() => {
-    dispatch(changeResponseValue({ ownerCardPack: !ownerCardPack }));
-  }, [dispatch, ownerCardPack]);
 
   const handlePerPageChange = useCallback(
     (value: number) => {
@@ -52,22 +48,19 @@ export const Main = () => {
 
   useEffect(() => {
     isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack]);
+  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue]);
 
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
     <>
       <div className={cn('container', styles.root)}>
-        <div>
-          <MultiRangeSlider
-            max={3000}
-            callback={(selectedMin, selectedMax) => console.log('' + selectedMin + '---' + selectedMax)}
-          />
-        </div>
+        <MultiRangeSlider
+          max={3000}
+          callback={(selectedMin, selectedMax) => console.log('' + selectedMin + '---' + selectedMax)}
+        />
+        <SearchForm ownerCardPack={ownerCardPack} />
 
         <AddCardForm />
-
-        <Switch checked={ownerCardPack} label="Мои колоды" onChange={handleChangeOwnerPack} />
 
         <Table
           pagination={

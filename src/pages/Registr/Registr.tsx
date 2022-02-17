@@ -18,9 +18,9 @@ import { RoutesEnum } from '../../helpers/routes';
 
 export const Registr = () => {
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
   const [passFocus, setPassFocus] = useState(false);

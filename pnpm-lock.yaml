@@ -11,6 +11,7 @@ specifiers:
   '@testing-library/user-event': ^7.1.2
   '@types/axios': ^0.14.0
   '@types/jest': ^24.0.0
+  '@types/lodash': ^4.14.178
   '@types/node': ^12.0.0
   '@types/react': ^16.9.0
   '@types/react-dom': ^16.9.0
@@ -21,6 +22,7 @@ specifiers:
   axios: ^0.25.0
   classnames: ^2.3.1
   formik: ^2.2.9
+  lodash: ^4.17.21
   moment: ^2.29.1
   node-sass: 6.0.0
   prettier: 2.3.0
@@ -50,6 +52,7 @@ dependencies:
   '@testing-library/react': 9.5.0_react-dom@17.0.2+react@17.0.2
   '@testing-library/user-event': 7.2.1
   '@types/jest': 24.9.1
+  '@types/lodash': 4.14.178
   '@types/node': 12.20.43
   '@types/react': 16.14.23
   '@types/react-dom': 16.9.14
@@ -57,6 +60,7 @@ dependencies:
   '@types/redux-logger': 3.0.9
   axios: 0.25.0
   formik: 2.2.9_react@17.0.2
+  lodash: 4.17.21
   moment: 2.29.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2

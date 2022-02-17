@@ -8,11 +8,11 @@ import { AppDispatch, RootStateType } from '../store';
 import { toast } from 'react-toastify';
 
 export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
-  const { page, pageCount, ownerCardPack } = getState().cardPack;
+  const { page, pageCount, ownerCardPack, searchValue } = getState().cardPack;
   const { _id } = getState().profile;
   dispatch(setStatusAppAC('loading'));
   api
-    .getCardPack({ page, pageCount, user_id: ownerCardPack ? _id : undefined })
+    .getCardPack({ page, pageCount, user_id: ownerCardPack ? _id : undefined, packName: searchValue })
     .then(({ data }) => {
       dispatch(setCardPack(data));
     })
