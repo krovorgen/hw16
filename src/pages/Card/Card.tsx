@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { getCard } from '../../redux/thunk/card-thunk';
 import { Input } from '@alfalab/core-components/input';
 import { resetCard } from '../../redux/reducer/card-reducer';
+import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 
 import { useDebounce } from 'use-debounce';
 
@@ -103,6 +104,7 @@ export const Card = () => {
             clear
             onClear={() => setSearchTerm('')}
             block
+            leftAddons={<MagnifierMIcon />}
           />
         </div>
 
