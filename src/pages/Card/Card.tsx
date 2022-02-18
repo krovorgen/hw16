@@ -13,7 +13,7 @@ import { Loader } from '@alfalab/core-components/loader';
 import dayjs from 'dayjs';
 import { getCard } from '../../redux/thunk/card-thunk';
 import { Input } from '@alfalab/core-components/input';
-import { resetCard } from '../../redux/reducer/card-reducer';
+import { resetCard, setCardUserId } from '../../redux/reducer/card-reducer';
 import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 
 import { useDebounce } from 'use-debounce';
@@ -23,7 +23,8 @@ export const Card = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const { page, pageCount, cards, cardsTotalCount } = useAppSelector((state) => state.card);
+  const { page, pageCount, cards, cardsTotalCount, packUserId } = useAppSelector((state) => state.card);
+  const userId = useAppSelector((state) => state.profile._id);
 
   const { id } = useParams();
   const [perPage, setPerPage] = useState(pageCount);
@@ -63,6 +64,7 @@ export const Card = () => {
   useEffect(() => {
     return () => {
       dispatch(resetCard());
+      dispatch(setCardUserId(null));
     };
   }, [dispatch]);
 
@@ -97,7 +99,12 @@ export const Card = () => {
     <>
       <div className={cn('container', styles.root)}>
         <div className={styles.search}>
-          <NewCardCreator cardsPack_id={id!} />
+          {packUserId === userId ? (
+            <div className={styles.addNewCard}>
+              <NewCardCreator cardsPack_id={id!} />
+            </div>
+          ) : null}
+
           <Input
             label="Search..."
             name="search"

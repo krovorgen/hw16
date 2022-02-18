@@ -6,6 +6,7 @@ export type InitialStateType = {
   pageCount: number;
   cards: CardItemType[];
   cardsTotalCount: number;
+  packUserId: null | string;
 };
 
 const initialState: InitialStateType = {
@@ -13,6 +14,7 @@ const initialState: InitialStateType = {
   pageCount: 5,
   cards: [],
   cardsTotalCount: 0,
+  packUserId: null,
 };
 
 const slice = createSlice({
@@ -28,9 +30,12 @@ const slice = createSlice({
     resetCard(state) {
       state.cards = [];
     },
+    setCardUserId(state, action: PayloadAction<string | null>) {
+      state.packUserId = action.payload;
+    },
   },
 });
 
-export const { setCard, setCardsTotalCount, resetCard } = slice.actions;
+export const { setCard, setCardsTotalCount, resetCard, setCardUserId } = slice.actions;
 
 export const cardReducer = slice.reducer;
