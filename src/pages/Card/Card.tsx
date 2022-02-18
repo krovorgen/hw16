@@ -63,7 +63,7 @@ export const Card = () => {
 
   useEffect(() => {
     refreshData();
-  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
+  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search, refreshData]);
 
   useEffect(() => {
     return () => {
