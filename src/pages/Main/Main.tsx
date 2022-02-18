@@ -14,7 +14,6 @@ import { LogoutButton } from '../../components/LogoutButton';
 import { deleteCardPackTC, setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
 import { CardPacksItem } from '../../api';
-import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 import { AddCardForm } from './AddCardForm';
 
 import styles from './Main.module.scss';
@@ -71,10 +70,6 @@ export const Main = () => {
   return (
     <>
       <div className={cn('container', styles.root)}>
-        <MultiRangeSlider
-          max={3000}
-          callback={(selectedMin, selectedMax) => console.log('' + selectedMin + '---' + selectedMax)}
-        />
         <SearchForm ownerCardPack={ownerCardPack} />
 
         <AddCardForm />
