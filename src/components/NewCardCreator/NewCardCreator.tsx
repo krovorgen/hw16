@@ -12,9 +12,10 @@ import { catchHandler } from '../../helpers/catchHandler';
 
 type Props = {
   cardsPack_id: string;
+  refreshData: () => void;
 };
 
-export const NewCardCreator: FC<Props> = ({ cardsPack_id }) => {
+export const NewCardCreator: FC<Props> = ({ cardsPack_id, refreshData }) => {
   const [open, setOpen] = useState(false);
   const [question, setQuestion] = useState<string>();
   const [answer, setAnswer] = useState<string>();
@@ -113,6 +114,8 @@ export const NewCardCreator: FC<Props> = ({ cardsPack_id }) => {
       .createNewCard(newCard)
       .then(() => {
         toast.success('CARD CREATED SUCCESSFULLY!');
+
+        refreshData();
       })
       .catch(catchHandler)
       .finally();

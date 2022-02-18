@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useCallback, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -37,7 +37,7 @@ export const Card = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [search] = useDebounce(searchTerm, 1000);
 
-  useEffect(() => {
+  const refreshData = useCallback(() => {
     if (!id) return;
 
     const data: GetCardRequest = {
@@ -59,6 +59,10 @@ export const Card = () => {
     }
 
     dispatch(getCard(data));
+  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
+
+  useEffect(() => {
+    refreshData();
   }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
 
   useEffect(() => {
@@ -89,10 +93,6 @@ export const Card = () => {
     setSearchTerm(e.target.value);
   };
 
-  // const handleClearSearchTerm = (event: MouseEvent<HTMLButtonElement>) => {
-  //   setSearchTerm('');
-  // };
-
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
@@ -101,7 +101,7 @@ export const Card = () => {
         <div className={styles.search}>
           {packUserId === userId ? (
             <div className={styles.addNewCard}>
-              <NewCardCreator cardsPack_id={id!} />
+              <NewCardCreator cardsPack_id={id!} refreshData={refreshData} />
             </div>
           ) : null}
 
@@ -171,7 +171,7 @@ export const Card = () => {
             {cards ? (
               cards.length !== 0 &&
               cards.map((item) => {
-                return <TableItem item={item} key={item._id} />;
+                return <TableItem item={item} userId={userId} refreshData={refreshData} key={item._id} />;
               })
             ) : (
               <Loader />

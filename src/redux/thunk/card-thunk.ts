@@ -17,3 +17,13 @@ export const getCard = (data: GetCardRequest) => (dispatch: AppDispatch) => {
     .catch(catchHandler)
     .finally(() => dispatch(setStatusAppAC('idle')));
 };
+
+export const deleteCard = (id: string) => (dispatch: AppDispatch) => {
+  dispatch(setStatusAppAC('loading'));
+
+  api
+    .deleteCard(id)
+    .then(() => {})
+    .catch(catchHandler)
+    .finally(() => dispatch(setStatusAppAC('idle')));
+};
