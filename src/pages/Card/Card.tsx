@@ -87,10 +87,6 @@ export const Card = () => {
     setSearchTerm(e.target.value);
   };
 
-  // const handleClearSearchTerm = (event: MouseEvent<HTMLButtonElement>) => {
-  //   setSearchTerm('');
-  // };
-
   if (!isLoggedIn) return <Navigate to="/login" />;
 
   return (
