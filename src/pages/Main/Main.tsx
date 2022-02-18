@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { Button } from '@alfalab/core-components/button';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
+import { SearchForm } from './SearchForm';
 
 import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
@@ -17,17 +18,22 @@ import { MultiRangeSlider } from '../../components/MultiRangeSlider';
 import { AddCardForm } from './AddCardForm';
 
 import styles from './Main.module.scss';
-import { SearchForm } from './SearchForm';
+
+const defaultIsSortedDesc = false;
 
 export const Main = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
   const userId = useAppSelector((state) => state.profile._id);
-  const { page, pageCount, ownerCardPack, responseData, searchValue } = useAppSelector((state) => state.cardPack);
+  const { page, pageCount, ownerCardPack, responseData, searchValue, sortPacks } = useAppSelector(
+    (state) => state.cardPack
+  );
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
+  const [sortKey, setSortKey] = useState<string | undefined>(undefined);
+  const [isSortedDesc, setIsSortedDesc] = useState<boolean | undefined>(undefined);
 
   const handlePerPageChange = useCallback(
     (value: number) => {
@@ -46,9 +52,20 @@ export const Main = () => {
     [dispatch]
   );
 
+  const handleSort = (key: string) => {
+    setSortKey(key);
+    if (isSortedDesc !== undefined) {
+      dispatch(changeResponseValue({ sortPacks: `${isSortedDesc ? 0 : 1}${sortKey}` }));
+      setIsSortedDesc(!isSortedDesc ? undefined : defaultIsSortedDesc);
+    } else {
+      dispatch(changeResponseValue({ sortPacks: undefined }));
+      setIsSortedDesc(!defaultIsSortedDesc);
+    }
+  };
+
   useEffect(() => {
     isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue]);
+  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks]);
 
   if (!isLoggedIn) return <Navigate to="/login" />;
   return (
@@ -76,10 +93,30 @@ export const Main = () => {
           }
         >
           <Table.THead className={styles.thead}>
-            <Table.THeadCell>Name</Table.THeadCell>
-            <Table.THeadCell>Cards</Table.THeadCell>
-            <Table.THeadCell>Last Updated</Table.THeadCell>
-            <Table.THeadCell>Created by</Table.THeadCell>
+            <Table.TSortableHeadCell
+              isSortedDesc={sortKey === 'name' ? isSortedDesc : undefined}
+              onSort={() => handleSort('name')}
+            >
+              Name
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              isSortedDesc={sortKey === 'cardsCount' ? isSortedDesc : undefined}
+              onSort={() => handleSort('cardsCount')}
+            >
+              Cards
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              isSortedDesc={sortKey === 'updated' ? isSortedDesc : undefined}
+              onSort={() => handleSort('updated')}
+            >
+              Last Updated
+            </Table.TSortableHeadCell>
+            <Table.TSortableHeadCell
+              isSortedDesc={sortKey === 'created' ? isSortedDesc : undefined}
+              onSort={() => handleSort('created')}
+            >
+              Created by
+            </Table.TSortableHeadCell>
             <Table.THeadCell>Actions</Table.THeadCell>
           </Table.THead>
           <Table.TBody>
