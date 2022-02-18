@@ -2,7 +2,7 @@ import React, { FC, memo, useCallback, useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import { Button } from '@alfalab/core-components/button';
 import { Table } from '@alfalab/core-components/table';
@@ -115,8 +115,8 @@ const TableItem: FC<TableItemProps> = memo(({ item, userId }) => {
         <Link to={`/card/${item._id}`}>{item.name}</Link>
       </Table.TCell>
       <Table.TCell>{item.cardsCount}</Table.TCell>
-      <Table.TCell>{moment(item.updated).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
-      <Table.TCell>{moment(item.created).format('Y.MM.DD HH:mm:ss')}</Table.TCell>
+      <Table.TCell>{dayjs(item.updated).format('YY.MM.DD HH:mm:ss')}</Table.TCell>
+      <Table.TCell>{dayjs(item.created).format('YY.MM.DD HH:mm:ss')}</Table.TCell>
       <Table.TCell className={styles.nav}>
         <div className={styles.navWrap}>
           {item.user_id === userId && (

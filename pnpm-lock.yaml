@@ -24,7 +24,6 @@ specifiers:
   dayjs: ^1.10.7
   formik: ^2.2.9
   lodash: ^4.17.21
-  moment: ^2.29.1
   node-sass: 6.0.0
   prettier: 2.3.0
   react: ^17.0.2
@@ -64,7 +63,6 @@ dependencies:
   dayjs: 1.10.7
   formik: 2.2.9_react@17.0.2
   lodash: 4.17.21
-  moment: 2.29.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   react-redux: 7.2.6_react-dom@17.0.2+react@17.0.2
@@ -7535,10 +7533,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
-
-  /moment/2.29.1:
-    resolution: {integrity: sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==}
-    dev: false
 
   /ms/2.0.0:
     resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
