@@ -171,7 +171,7 @@ export const Card = () => {
             {cards ? (
               cards.length !== 0 &&
               cards.map((item) => {
-                return <TableItem item={item} userId={userId} refreshData={refreshData} key={item._id} />;
+                return <TableItem item={item} key={item._id} />;
               })
             ) : (
               <Loader />
