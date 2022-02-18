@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useCallback, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
@@ -13,7 +13,7 @@ import { Loader } from '@alfalab/core-components/loader';
 import dayjs from 'dayjs';
 import { getCard } from '../../redux/thunk/card-thunk';
 import { Input } from '@alfalab/core-components/input';
-import { resetCard } from '../../redux/reducer/card-reducer';
+import { resetCard, setCardUserId } from '../../redux/reducer/card-reducer';
 import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 
 import { useDebounce } from 'use-debounce';
@@ -23,7 +23,8 @@ export const Card = () => {
   const dispatch = useDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const { page, pageCount, cards, cardsTotalCount } = useAppSelector((state) => state.card);
+  const { page, pageCount, cards, cardsTotalCount, packUserId } = useAppSelector((state) => state.card);
+  const userId = useAppSelector((state) => state.profile._id);
 
   const { id } = useParams();
   const [perPage, setPerPage] = useState(pageCount);
@@ -36,7 +37,7 @@ export const Card = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [search] = useDebounce(searchTerm, 1000);
 
-  useEffect(() => {
+  const refreshData = useCallback(() => {
     if (!id) return;
 
     const data: GetCardRequest = {
@@ -61,8 +62,13 @@ export const Card = () => {
   }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
 
   useEffect(() => {
+    refreshData();
+  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search, refreshData]);
+
+  useEffect(() => {
     return () => {
       dispatch(resetCard());
+      dispatch(setCardUserId(null));
     };
   }, [dispatch]);
 
@@ -93,7 +99,12 @@ export const Card = () => {
     <>
       <div className={cn('container', styles.root)}>
         <div className={styles.search}>
-          <NewCardCreator cardsPack_id={id!} />
+          {packUserId === userId ? (
+            <div className={styles.addNewCard}>
+              <NewCardCreator cardsPack_id={id!} refreshData={refreshData} />
+            </div>
+          ) : null}
+
           <Input
             label="Search..."
             name="search"
