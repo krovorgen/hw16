@@ -1,20 +1,17 @@
-import React, { FC, memo, useCallback, useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
-import dayjs from 'dayjs';
-
-import { Button } from '@alfalab/core-components/button';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
 import { SearchForm } from './SearchForm';
 
 import { useAppSelector } from '../../redux/hooks';
 import { LogoutButton } from '../../components/LogoutButton';
-import { deleteCardPackTC, setCardPackTC } from '../../redux/thunk/card-pack-thunk';
+import { setCardPackTC } from '../../redux/thunk/card-pack-thunk';
 import { changeResponseValue } from '../../redux/reducer/card-pack-reducer';
-import { CardPacksItem } from '../../api';
 import { AddCardForm } from './AddCardForm';
+import { TableItem } from './TableItem';
 
 import styles from './Main.module.scss';
 
@@ -53,6 +50,7 @@ export const Main = () => {
 
   const handleSort = (key: string) => {
     setSortKey(key);
+    currentPage !== 0 && setCurrentPage(0);
     if (isSortedDesc !== undefined) {
       dispatch(changeResponseValue({ sortPacks: `${isSortedDesc ? 0 : 1}${sortKey}` }));
       setIsSortedDesc(!isSortedDesc ? undefined : defaultIsSortedDesc);
@@ -117,8 +115,8 @@ export const Main = () => {
           <Table.TBody>
             {responseData?.cardPacks ? (
               responseData.cardPacks.length !== 0 &&
-              responseData.cardPacks.map((item, index) => {
-                return <TableItem item={item} userId={userId} key={index} />;
+              responseData.cardPacks.map((item) => {
+                return <TableItem item={item} userId={userId} key={item._id} />;
               })
             ) : (
               <Loader />
@@ -130,38 +128,3 @@ export const Main = () => {
     </>
   );
 };
-
-type TableItemProps = {
-  item: CardPacksItem;
-  userId: string;
-};
-
-const TableItem: FC<TableItemProps> = memo(({ item, userId }) => {
-  const dispatch = useDispatch();
-  const deleteCardPack = useCallback(() => {
-    dispatch(deleteCardPackTC(item._id));
-  }, [dispatch, item._id]);
-  return (
-    <Table.TRow>
-      <Table.TCell>
-        <Link to={`/card/${item._id}`}>{item.name}</Link>
-      </Table.TCell>
-      <Table.TCell>{item.cardsCount}</Table.TCell>
-      <Table.TCell>{dayjs(item.updated).format('YY.MM.DD HH:mm:ss')}</Table.TCell>
-      <Table.TCell>{dayjs(item.created).format('YY.MM.DD HH:mm:ss')}</Table.TCell>
-      <Table.TCell className={styles.nav}>
-        <div className={styles.navWrap}>
-          {item.user_id === userId && (
-            <>
-              <Button size="xxs" view="primary" onClick={deleteCardPack}>
-                Delete
-              </Button>
-              <Button size="xxs">Edit</Button>
-            </>
-          )}
-          <Button size="xxs">Learn</Button>
-        </div>
-      </Table.TCell>
-    </Table.TRow>
-  );
-});

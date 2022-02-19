@@ -13,7 +13,7 @@ export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStat
   dispatch(setStatusAppAC('loading'));
   api
     .getCardPack({
-      page,
+      page: page + 1,
       pageCount,
       user_id: ownerCardPack ? _id : undefined,
       packName: searchValue,

@@ -42,7 +42,7 @@ export const Card = () => {
 
     const data: GetCardRequest = {
       cardsPack_id: id,
-      page: currentPage,
+      page: currentPage + 1,
       pageCount: perPage,
     };
 
