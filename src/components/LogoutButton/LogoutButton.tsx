@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import { toast } from 'react-toastify';
 
 import LogOutMIcon from '@alfalab/icons-glyph/LogOutMIcon';
-import { setIsLoggedIn } from '../../redux/reducer/login-reducer';
-import { useAppDispatch } from '../../redux/hooks';
-import { api } from '../../api';
-import { catchHandler } from '../../helpers/catchHandler';
+import { setIsLoggedIn } from '@/redux/reducer/login-reducer';
+import { useAppDispatch } from '@/redux/hooks';
+import { api } from '@/api/api';
+import { catchHandler } from '@/helpers/catchHandler';
 
 import styles from './LogoutButton.module.scss';
 

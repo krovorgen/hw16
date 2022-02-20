@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-import { api } from '../../api';
+import { api } from '@/api/api';
 import { Loader } from '@alfalab/core-components/loader';
 
 import styles from './PingControl.module.scss';

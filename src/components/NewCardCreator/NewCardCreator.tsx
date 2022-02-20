@@ -1,14 +1,16 @@
+import { ChangeEvent, FC, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { Typography } from '@alfalab/core-components/typography';
 import { ModalDesktop } from '@alfalab/core-components/modal/desktop';
-import { ChangeEvent, FC, useState } from 'react';
 import { Button } from '@alfalab/core-components/button';
 import { Input } from '@alfalab/core-components/input';
 import { Attach } from '@alfalab/core-components/attach';
 
+import { api, createCardType } from '@/api/api';
+import { catchHandler } from '@/helpers/catchHandler';
+
 import styles from './NewCardCreator.module.scss';
-import { api, createCardType } from '../../api';
-import { toast } from 'react-toastify';
-import { catchHandler } from '../../helpers/catchHandler';
 
 type Props = {
   cardsPack_id: string;

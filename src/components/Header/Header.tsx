@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import cn from 'classnames';
+import Link from 'next/link';
 
 import { Link as LinkUI } from '@alfalab/core-components/link';
-import { RoutesEnum } from '../../helpers/routes';
+import { RoutesEnum } from '@/helpers/routes';
 
 import styles from './Header.module.scss';
 
@@ -11,26 +11,23 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div className={cn('container', styles.wrap)}>
-        <Link className={styles.link} to={RoutesEnum.Main}>
-          <LinkUI Component="span">Main</LinkUI>
+        <Link href={RoutesEnum.Main} passHref>
+          <LinkUI className={styles.link}>Main</LinkUI>
         </Link>
-        <Link className={styles.link} to={RoutesEnum.Login}>
-          <LinkUI Component="span">Login</LinkUI>
+        <Link href={RoutesEnum.Login} passHref>
+          <LinkUI className={styles.link}>Login</LinkUI>
         </Link>
-        <Link className={styles.link} to={RoutesEnum.Registration}>
-          <LinkUI Component="span">Registr</LinkUI>
+        <Link href={RoutesEnum.Registration} passHref>
+          <LinkUI className={styles.link}>Registr</LinkUI>
         </Link>
-        <Link className={styles.link} to="/404">
-          <LinkUI Component="span">Error404</LinkUI>
+        <Link href={RoutesEnum.PasswordRecovery} passHref>
+          <LinkUI className={styles.link}>PasswordRecovery</LinkUI>
         </Link>
-        <Link className={styles.link} to={RoutesEnum.PasswordRecovery}>
-          <LinkUI Component="span">PasswordRecovery</LinkUI>
+        <Link href={RoutesEnum.SetNewPassword} passHref>
+          <LinkUI className={styles.link}>SetNewPassword</LinkUI>
         </Link>
-        <Link className={styles.link} to={RoutesEnum.SetNewPassword}>
-          <LinkUI Component="span">SetNewPassword</LinkUI>
-        </Link>
-        <Link className={styles.link} to={RoutesEnum.Profile}>
-          <LinkUI Component="span">Profile</LinkUI>
+        <Link href={RoutesEnum.Profile} passHref>
+          <LinkUI className={styles.link}>Profile</LinkUI>
         </Link>
       </div>
     </header>

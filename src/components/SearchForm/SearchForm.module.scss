@@ -1,0 +1,17 @@
+@import "./src/scss/variables";
+@import "./src/scss/mixins";
+
+.root {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.addItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+}
