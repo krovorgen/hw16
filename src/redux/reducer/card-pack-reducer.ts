@@ -7,6 +7,8 @@ export type ModelCardPackUpdate = {
   ownerCardPack?: boolean;
   searchValue?: string;
   sortPacks?: string;
+  min?: string;
+  max?: string;
 };
 
 export type InitialStateType = {
@@ -16,6 +18,8 @@ export type InitialStateType = {
   ownerCardPack: boolean;
   searchValue: string;
   sortPacks: string;
+  min: string;
+  max: string;
 };
 
 const initialState: InitialStateType = {
@@ -25,12 +29,18 @@ const initialState: InitialStateType = {
   ownerCardPack: false,
   searchValue: '',
   sortPacks: '',
+  min: '0',
+  max: '0',
 };
 
 const slice = createSlice({
   name: 'card-pack',
   initialState,
   reducers: {
+    setMinMax(state, action: PayloadAction<{ min: string; max: string }>) {
+      state.min = action.payload.min;
+      state.max = action.payload.max;
+    },
     setCardPack(state, action: PayloadAction<GetPackResponse>) {
       state.responseData = action.payload;
     },
@@ -41,4 +51,4 @@ const slice = createSlice({
 });
 
 export const cardPackReducer = slice.reducer;
-export const { setCardPack, changeResponseValue } = slice.actions;
+export const { setMinMax, setCardPack, changeResponseValue } = slice.actions;

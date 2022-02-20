@@ -1,21 +1,21 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import styles from './MultyRangeSlider.module.scss';
 
 type propsType = {
+  min: number;
   max: number;
   callback: (selectedMin: number, selectedMax: number) => void;
 };
 
-export const MultiRangeSlider = (props: propsType) => {
+export const MultiRangeSlider: React.FC<propsType> = ({ min, max, callback }) => {
   const [minVal, setMinVal] = useState(0);
   const [maxVal, setMaxVal] = useState(100);
 
   const converter = useCallback(
     (percent: number) => {
-      return (props.max / 100) * percent;
+      return Math.floor((max / 100) * percent);
     },
-    [props.max]
+    [max]
   );
 
   const changeHandlerMin = (event: ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +24,7 @@ export const MultiRangeSlider = (props: propsType) => {
     } else {
       setMinVal(Number(event.currentTarget.value));
     }
+    callback(converter(minVal), converter(maxVal));
   };
 
   const changeHandlerMax = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,25 +33,22 @@ export const MultiRangeSlider = (props: propsType) => {
     } else {
       setMaxVal(Number(event.currentTarget.value));
     }
+    callback(converter(minVal), converter(maxVal));
   };
 
   let leftRightStyle = { left: `${minVal}%`, right: `${100 - maxVal}%` };
-  let badgeMinStyle = { left: `calc(${minVal}% + (${-40 - minVal * 0.2}px))` };
-  let badgeMaxStyle = { left: `calc(${maxVal}% + (${-40 - maxVal * 0.2}px))` };
-
-  useEffect(() => {
-    props.callback(converter(minVal), converter(maxVal));
-  }, [minVal, maxVal, props, converter]);
+  let badgeMinStyle = { left: `calc(${minVal}% + (${0 - minVal * 0.2}px))` };
+  let badgeMaxStyle = { left: `calc(${maxVal}% + (${0 - maxVal * 0.2}px))` };
 
   return (
     <div className={styles.rangeSliderWrapper}>
       <div className={styles.badges}>
         <div className={styles.badgeMin} style={badgeMinStyle}>
-          <div>{converter(minVal)}</div>
+          <div>{min}</div>
           <div className={styles.underline} />
         </div>
         <div className={styles.badgeMax} style={badgeMaxStyle}>
-          <div>{converter(maxVal)}</div>
+          <div>{max}</div>
           <div className={styles.underline} />
         </div>
       </div>

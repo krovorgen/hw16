@@ -9,6 +9,8 @@ import { AppDispatch, RootStateType } from '../store';
 export const setCardPackTC = () => (dispatch: AppDispatch, getState: () => RootStateType) => {
   const { page, pageCount, ownerCardPack, searchValue, sortPacks } = getState().cardPack;
   const { _id } = getState().profile;
+  const min = getState().cardPack.min;
+  const max = getState().cardPack.max;
   dispatch(setStatusAppAC('loading'));
   api
     .getCardPack({
@@ -17,6 +19,8 @@ export const setCardPackTC = () => (dispatch: AppDispatch, getState: () => RootS
       user_id: ownerCardPack ? _id : undefined,
       packName: searchValue,
       sortPacks: !!sortPacks ? sortPacks : undefined,
+      min: min,
+      max: max,
     })
     .then(({ data }) => {
       dispatch(setCardPack(data));

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
 import { useAppSelector } from '@/redux/hooks';
-import { changeResponseValue } from '@/redux/reducer/card-pack-reducer';
+import { changeResponseValue, setMinMax } from '@/redux/reducer/card-pack-reducer';
 import { setCardPackTC } from '@/redux/thunk/card-pack-thunk';
 import { RoutesEnum } from '@/helpers/routes';
 import { SearchForm } from '@/components/SearchForm';
@@ -15,6 +15,8 @@ import { TableItem } from '@/components/TableItem';
 import { LogoutButton } from '@/components/LogoutButton';
 
 import styles from './Main.module.scss';
+import { debounce } from 'lodash';
+import { MultiRangeSlider } from '@/components/MultiRangeSlider';
 
 const defaultIsSortedDesc = false;
 const Home = () => {
@@ -26,6 +28,8 @@ const Home = () => {
   const { page, pageCount, ownerCardPack, responseData, searchValue, sortPacks } = useAppSelector(
     (state) => state.cardPack
   );
+  const minCardsCount = useAppSelector((state) => state.cardPack.min);
+  const maxCardsCount = useAppSelector((state) => state.cardPack.max);
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
@@ -61,14 +65,44 @@ const Home = () => {
     }
   };
 
+  const sliderCallback = useCallback(
+    (min: number, max: number) => {
+      dispatch(setMinMax({ min: String(min), max: String(max) }));
+    },
+    [dispatch]
+  );
+
+  const debouncedResults = useMemo(() => {
+    return debounce(sliderCallback, 1000);
+  }, [sliderCallback]);
+
+  useEffect(() => {
+    isLoggedIn && dispatch(setMinMax({ min: '0', max: String(responseData?.maxCardsCount) }));
+  }, [dispatch, isLoggedIn]);
+
   useEffect(() => {
     isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks]);
+  }, [
+    dispatch,
+    page,
+    pageCount,
+    isLoggedIn,
+    userId,
+    ownerCardPack,
+    searchValue,
+    sortPacks,
+    minCardsCount,
+    maxCardsCount,
+  ]);
 
   if (!isLoggedIn) router.push(RoutesEnum.Login);
   return (
     <>
       <div className={cn('container', styles.root)}>
+        {isLoggedIn && (
+          <MultiRangeSlider min={Number(minCardsCount)} max={Number(maxCardsCount)} callback={debouncedResults} />
+        )}
+
         <SearchForm ownerCardPack={ownerCardPack} />
 
         <AddCardForm />
