@@ -125,11 +125,6 @@ export type CardPacksItem = {
   __v: number;
 };
 
-export type InfoResponseType = {
-  info: string;
-  error: string;
-};
-
 export type UserResponseType = {
   _id: string;
   email: string;

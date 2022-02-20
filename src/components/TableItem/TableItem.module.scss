@@ -1,0 +1,11 @@
+@import "./src/scss/variables";
+@import "./src/scss/mixins";
+
+.nav {
+  width: 310px;
+}
+
+.navWrap {
+  display: flex;
+  justify-content: space-between;
+}

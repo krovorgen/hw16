@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+
 import styles from './MultyRangeSlider.module.scss';
 
 type propsType = {

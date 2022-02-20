@@ -1,13 +1,12 @@
-import { Dispatch } from 'redux';
+import { toast } from 'react-toastify';
 
-import { api } from '../../api';
-import { catchHandler } from '../../helpers/catchHandler';
+import { api } from '@/api/api';
+import { catchHandler } from '@/helpers/catchHandler';
 import { setStatusAppAC } from '../reducer/app-reducer';
 import { setCardPack } from '../reducer/card-pack-reducer';
 import { AppDispatch, RootStateType } from '../store';
-import { toast } from 'react-toastify';
 
-export const setCardPackTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
+export const setCardPackTC = () => (dispatch: AppDispatch, getState: () => RootStateType) => {
   const { page, pageCount, ownerCardPack, searchValue, sortPacks } = getState().cardPack;
   const { _id } = getState().profile;
   dispatch(setStatusAppAC('loading'));

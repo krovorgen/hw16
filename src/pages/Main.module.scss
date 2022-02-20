@@ -1,0 +1,14 @@
+@import "./src/scss/variables";
+@import "./src/scss/mixins";
+
+.thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.pagination {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+}
