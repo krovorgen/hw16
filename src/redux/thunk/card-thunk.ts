@@ -1,18 +1,25 @@
 import { api, GetCardRequest } from '../../api';
-import { catchHandler } from '../../helpers/catchHandler';
+import { catchHandler } from '@/helpers/catchHandler';
 import { setStatusAppAC } from '../reducer/app-reducer';
-import { AppDispatch } from '../store';
-import { setCard, setCardsTotalCount, setCardUserId } from '../reducer/card-reducer';
+import { AppDispatch, RootStateType } from '../store';
+import { setCard } from '../reducer/card-reducer';
 
-export const getCard = (data: GetCardRequest) => (dispatch: AppDispatch) => {
+export const getCard = (id: string) => (dispatch: AppDispatch, getState: () => RootStateType) => {
   dispatch(setStatusAppAC('loading'));
+
+  const { page, pageCount } = getState().card;
+
+  const data: GetCardRequest = {
+    cardsPack_id: id,
+    page: page + 1,
+    pageCount,
+  };
 
   api
     .getCard(data)
     .then((res) => {
-      dispatch(setCard(res.data.cards));
-      dispatch(setCardsTotalCount(res.data.cardsTotalCount));
-      dispatch(setCardUserId(res.data.packUserId));
+      const { cards, cardsTotalCount, packUserId } = res.data;
+      dispatch(setCard({ cards, cardsTotalCount, packUserId }));
     })
     .catch(catchHandler)
     .finally(() => dispatch(setStatusAppAC('idle')));

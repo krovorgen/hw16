@@ -10,7 +10,7 @@ import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 import { Input } from '@alfalab/core-components/input';
 
 import { getCard } from '@/redux/thunk/card-thunk';
-import { resetCard, setCardUserId } from '@/redux/reducer/card-reducer';
+import { changeResponseValue, resetCard } from '@/redux/reducer/card-reducer';
 import { NewCardCreator } from '@/components/NewCardCreator';
 import { CardTableItem } from '@/components/CardTableItem';
 import { useAppSelector } from '@/redux/hooks';
@@ -57,27 +57,26 @@ const Card = () => {
       data.cardQuestion = search;
     }
 
-    dispatch(getCard(data));
+    dispatch(getCard(id));
   }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search]);
 
-  useEffect(() => {
-    refreshData();
-  }, [currentPage, perPage, id, dispatch, sortKey, isSortedDesc, search, refreshData]);
+  const handlePageChange = useCallback(
+    (pageIndex: number) => {
+      console.log('change page', pageIndex);
+      dispatch(changeResponseValue({ page: pageIndex }));
+      setCurrentPage(pageIndex);
+    },
+    [dispatch]
+  );
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetCard());
-      dispatch(setCardUserId(null));
-    };
-  }, [dispatch]);
-
-  const handlePageChange = (pageIndex: number) => {
-    setCurrentPage(pageIndex);
-  };
-
-  const handlePerPageChange = (value: number) => {
-    setPerPage(value);
-  };
+  const handlePerPageChange = useCallback(
+    (value: number) => {
+      dispatch(changeResponseValue({ page: 0, pageCount: value }));
+      setCurrentPage(0);
+      setPerPage(value);
+    },
+    [dispatch]
+  );
 
   const handleSort = (key: string) => {
     setSortKey(key);
@@ -91,6 +90,22 @@ const Card = () => {
   const handleChangeSearchTerm = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+
+  // on mount + clean up
+  useEffect(() => {
+    dispatch(getCard(id));
+
+    return () => {
+      console.log('clean up');
+
+      dispatch(resetCard());
+    };
+  }, [dispatch]);
+
+  // on page change or per page change
+  useEffect(() => {
+    dispatch(getCard(id));
+  }, [dispatch, page, pageCount]);
 
   if (!isLoggedIn) router.push(RoutesEnum.Login);
 
