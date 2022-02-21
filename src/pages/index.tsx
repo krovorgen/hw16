@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
+import { NextPage } from 'next';
 
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
@@ -17,7 +18,7 @@ import { LogoutButton } from '@/components/LogoutButton';
 import styles from './Main.module.scss';
 
 const defaultIsSortedDesc = false;
-const Home = () => {
+const Home: NextPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
