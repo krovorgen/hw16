@@ -63,10 +63,13 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks]);
+    if (isLoggedIn) {
+      dispatch(setCardPackTC());
+    } else {
+      router.push(RoutesEnum.Login);
+    }
+  }, [dispatch, router, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks]);
 
-  if (!isLoggedIn) router.push(RoutesEnum.Login);
   return (
     <>
       <div className={cn('container', styles.root)}>
