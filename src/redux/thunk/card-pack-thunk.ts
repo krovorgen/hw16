@@ -7,7 +7,7 @@ import { setCardPack } from '../reducer/card-pack-reducer';
 import { AppDispatch, RootStateType } from '../store';
 
 export const setCardPackTC = () => (dispatch: AppDispatch, getState: () => RootStateType) => {
-  const { page, pageCount, ownerCardPack, searchValue, sortPacks } = getState().cardPack;
+  const { page, pageCount, ownerCardPack, searchValue, sortPacks, responseData, min, max} = getState().cardPack;
   const { _id } = getState().profile;
   dispatch(setStatusAppAC('loading'));
   api
@@ -17,6 +17,8 @@ export const setCardPackTC = () => (dispatch: AppDispatch, getState: () => RootS
       user_id: ownerCardPack ? _id : undefined,
       packName: searchValue,
       sortPacks: !!sortPacks ? sortPacks : undefined,
+      min,
+      max
     })
     .then(({ data }) => {
       dispatch(setCardPack(data));

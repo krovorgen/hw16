@@ -7,6 +7,8 @@ export type ModelCardPackUpdate = {
   ownerCardPack?: boolean;
   searchValue?: string;
   sortPacks?: string;
+  min?: string;
+  max?: string;
 };
 
 export type InitialStateType = {
@@ -16,6 +18,8 @@ export type InitialStateType = {
   ownerCardPack: boolean;
   searchValue: string;
   sortPacks: string;
+  min?: string;
+  max?: string;
 };
 
 const initialState: InitialStateType = {
@@ -24,7 +28,9 @@ const initialState: InitialStateType = {
   pageCount: 5,
   ownerCardPack: false,
   searchValue: '',
-  sortPacks: '',
+  sortPacks: '', 
+  min: '',
+  max: ''
 };
 
 const slice = createSlice({
@@ -35,6 +41,7 @@ const slice = createSlice({
       state.responseData = action.payload;
     },
     changeResponseValue(state, action: PayloadAction<ModelCardPackUpdate>) {
+      console.log(state);
       return { ...state, ...action.payload };
     },
   },

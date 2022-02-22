@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
@@ -6,7 +6,7 @@ import cn from 'classnames';
 import { Table } from '@alfalab/core-components/table';
 import { Loader } from '@alfalab/core-components/loader';
 import { useAppSelector } from '@/redux/hooks';
-import { changeResponseValue } from '@/redux/reducer/card-pack-reducer';
+import { changeResponseValue} from '@/redux/reducer/card-pack-reducer';
 import { setCardPackTC } from '@/redux/thunk/card-pack-thunk';
 import { RoutesEnum } from '@/helpers/routes';
 import { SearchForm } from '@/components/SearchForm';
@@ -15,6 +15,8 @@ import { TableItem } from '@/components/TableItem';
 import { LogoutButton } from '@/components/LogoutButton';
 
 import styles from './Main.module.scss';
+import { debounce } from 'lodash';
+import { MultiRangeSlider } from '@/components/MultiRangeSlider';
 
 const defaultIsSortedDesc = false;
 const Home = () => {
@@ -26,6 +28,9 @@ const Home = () => {
   const { page, pageCount, ownerCardPack, responseData, searchValue, sortPacks } = useAppSelector(
     (state) => state.cardPack
   );
+
+  const min = useAppSelector((state) => state.cardPack.min);
+  const max = useAppSelector((state) => state.cardPack.max);
 
   const [perPage, setPerPage] = useState(pageCount);
   const [currentPage, setCurrentPage] = useState(page);
@@ -43,10 +48,10 @@ const Home = () => {
 
   const handlePageChange = useCallback(
     (pageIndex: number) => {
-      dispatch(changeResponseValue({ page: pageIndex }));
+      dispatch(changeResponseValue({ page: pageIndex, min, max}));
       setCurrentPage(pageIndex);
     },
-    [dispatch]
+    [dispatch, min, max]
   );
 
   const handleSort = (key: string) => {
@@ -61,72 +66,90 @@ const Home = () => {
     }
   };
 
+  const sliderCallback = useCallback(
+    (min: number, max: number) => {
+      dispatch(changeResponseValue({min:String(min), max:String(max)}));
+    },
+    [dispatch]
+  );
+
+  const debouncedResults = useMemo(() => {
+    return debounce(sliderCallback, 1000);
+  }, [sliderCallback]);
+
   useEffect(() => {
+    console.log(min, max);
     isLoggedIn && dispatch(setCardPackTC());
-  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks]);
+  }, [dispatch, page, pageCount, isLoggedIn, userId, ownerCardPack, searchValue, sortPacks, min, max]);
 
   if (!isLoggedIn) router.push(RoutesEnum.Login);
   return (
-    <>
-      <div className={cn('container', styles.root)}>
-        <SearchForm ownerCardPack={ownerCardPack} />
+    <div className={cn('container', styles.root)}>
+      {responseData?.maxCardsCount ? (
+        <>
+          <MultiRangeSlider max={responseData?.maxCardsCount as number} callback={debouncedResults} />
 
-        <AddCardForm />
+          <SearchForm ownerCardPack={ownerCardPack} />
 
-        <Table
-          pagination={
-            <Table.Pagination
-              className={styles.pagination}
-              perPage={perPage}
-              currentPageIndex={currentPage}
-              pagesCount={Math.ceil(responseData?.cardPacksTotalCount! / pageCount)}
-              onPageChange={handlePageChange}
-              onPerPageChange={handlePerPageChange}
-              possiblePerPage={[5, 25, 50, 100]}
-            />
-          }
-        >
-          <Table.THead className={styles.thead}>
-            <Table.TSortableHeadCell
-              isSortedDesc={sortKey === 'name' ? isSortedDesc : undefined}
-              onSort={() => handleSort('name')}
-            >
-              Name
-            </Table.TSortableHeadCell>
-            <Table.TSortableHeadCell
-              isSortedDesc={sortKey === 'cardsCount' ? isSortedDesc : undefined}
-              onSort={() => handleSort('cardsCount')}
-            >
-              Cards
-            </Table.TSortableHeadCell>
-            <Table.TSortableHeadCell
-              isSortedDesc={sortKey === 'updated' ? isSortedDesc : undefined}
-              onSort={() => handleSort('updated')}
-            >
-              Last Updated
-            </Table.TSortableHeadCell>
-            <Table.TSortableHeadCell
-              isSortedDesc={sortKey === 'created' ? isSortedDesc : undefined}
-              onSort={() => handleSort('created')}
-            >
-              Created by
-            </Table.TSortableHeadCell>
-            <Table.THeadCell>Actions</Table.THeadCell>
-          </Table.THead>
-          <Table.TBody>
-            {responseData?.cardPacks ? (
-              responseData.cardPacks.length !== 0 &&
-              responseData.cardPacks.map((item) => {
-                return <TableItem item={item} userId={userId} key={item._id} />;
-              })
-            ) : (
-              <Loader />
-            )}
-          </Table.TBody>
-        </Table>
-      </div>
-      <LogoutButton />
-    </>
+          <AddCardForm />
+
+          <Table
+            pagination={
+              <Table.Pagination
+                className={styles.pagination}
+                perPage={perPage}
+                currentPageIndex={currentPage}
+                pagesCount={Math.ceil(responseData?.cardPacksTotalCount! / pageCount)}
+                onPageChange={handlePageChange}
+                onPerPageChange={handlePerPageChange}
+                possiblePerPage={[5, 25, 50, 100]}
+              />
+            }
+          >
+            <Table.THead className={styles.thead}>
+              <Table.TSortableHeadCell
+                isSortedDesc={sortKey === 'name' ? isSortedDesc : undefined}
+                onSort={() => handleSort('name')}
+              >
+                Name
+              </Table.TSortableHeadCell>
+              <Table.TSortableHeadCell
+                isSortedDesc={sortKey === 'cardsCount' ? isSortedDesc : undefined}
+                onSort={() => handleSort('cardsCount')}
+              >
+                Cards
+              </Table.TSortableHeadCell>
+              <Table.TSortableHeadCell
+                isSortedDesc={sortKey === 'updated' ? isSortedDesc : undefined}
+                onSort={() => handleSort('updated')}
+              >
+                Last Updated
+              </Table.TSortableHeadCell>
+              <Table.TSortableHeadCell
+                isSortedDesc={sortKey === 'created' ? isSortedDesc : undefined}
+                onSort={() => handleSort('created')}
+              >
+                Created by
+              </Table.TSortableHeadCell>
+              <Table.THeadCell>Actions</Table.THeadCell>
+            </Table.THead>
+            <Table.TBody>
+              {responseData?.cardPacks ? (
+                responseData.cardPacks.length !== 0 &&
+                responseData.cardPacks.map((item) => {
+                  return <TableItem item={item} userId={userId} key={item._id} />;
+                })
+              ) : (
+                <Loader />
+              )}
+            </Table.TBody>
+          </Table>
+          <LogoutButton />
+        </>
+      ) : (
+        <Loader className={styles.loader} />
+      )}
+    </div>
   );
 };
 
