@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 import { api, GetCardRequest } from '../../api';
 import { catchHandler } from '@/helpers/catchHandler';
 import { setStatusAppAC } from '../reducer/app-reducer';
@@ -7,12 +9,14 @@ import { setCard } from '../reducer/card-reducer';
 export const getCard = (id: string) => (dispatch: AppDispatch, getState: () => RootStateType) => {
   dispatch(setStatusAppAC('loading'));
 
-  const { page, pageCount } = getState().card;
+  const { page, pageCount, sortCards, cardQuestion } = getState().card;
 
   const data: GetCardRequest = {
     cardsPack_id: id,
     page: page + 1,
     pageCount,
+    sortCards,
+    cardQuestion,
   };
 
   api
@@ -25,12 +29,15 @@ export const getCard = (id: string) => (dispatch: AppDispatch, getState: () => R
     .finally(() => dispatch(setStatusAppAC('idle')));
 };
 
-export const deleteCard = (id: string) => (dispatch: AppDispatch) => {
+export const deleteCard = (id: string, cardId: string) => (dispatch: AppDispatch) => {
   dispatch(setStatusAppAC('loading'));
 
   api
-    .deleteCard(id)
-    .then(() => {})
+    .deleteCard(cardId)
+    .then(() => {
+      toast.success('card was deleted');
+      dispatch(getCard(id));
+    })
     .catch(catchHandler)
     .finally(() => dispatch(setStatusAppAC('idle')));
 };

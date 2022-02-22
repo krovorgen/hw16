@@ -4,6 +4,8 @@ import { CardItemType } from '../../api';
 type ModelCardUpdate = {
   page?: number;
   pageCount?: number;
+  sortCards?: undefined | string;
+  cardQuestion?: string;
 };
 
 export type InitialStateType = {
@@ -12,6 +14,8 @@ export type InitialStateType = {
   cards: CardItemType[];
   cardsTotalCount: number;
   packUserId: null | string;
+  sortCards: undefined | string;
+  cardQuestion: string;
 };
 
 const initialState: InitialStateType = {
@@ -20,6 +24,8 @@ const initialState: InitialStateType = {
   cards: [],
   cardsTotalCount: 0,
   packUserId: null,
+  sortCards: undefined,
+  cardQuestion: '',
 };
 
 const slice = createSlice({
@@ -32,15 +38,10 @@ const slice = createSlice({
       state.cardsTotalCount = cardsTotalCount;
       state.packUserId = packUserId;
     },
-    setCardsTotalCount(state, action: PayloadAction<number>) {
-      state.cardsTotalCount = action.payload;
-    },
     resetCard(state) {
       state.cards = [];
       state.packUserId = null;
-    },
-    setCardUserId(state, action: PayloadAction<string | null>) {
-      state.packUserId = action.payload;
+      state.page = 0;
     },
     changeResponseValue(state, action: PayloadAction<ModelCardUpdate>) {
       return { ...state, ...action.payload };

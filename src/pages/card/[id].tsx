@@ -9,7 +9,7 @@ import { Loader } from '@alfalab/core-components/loader';
 import { MagnifierMIcon } from '@alfalab/icons-glyph/MagnifierMIcon';
 import { Input } from '@alfalab/core-components/input';
 
-import { getCard } from '@/redux/thunk/card-thunk';
+import { deleteCard, getCard } from '@/redux/thunk/card-thunk';
 import { changeResponseValue, resetCard } from '@/redux/reducer/card-reducer';
 import { NewCardCreator } from '@/components/NewCardCreator';
 import { CardTableItem } from '@/components/CardTableItem';
@@ -25,7 +25,7 @@ const Card = () => {
   const id = router.query.id as string;
 
   const isLoggedIn = useAppSelector((state) => state.login.isLoggedIn);
-  const { page, pageCount, cards, cardsTotalCount, packUserId } = useAppSelector((state) => state.card);
+  const { page, pageCount, cards, cardsTotalCount, packUserId, sortCards } = useAppSelector((state) => state.card);
   const userId = useAppSelector((state) => state.profile._id);
 
   const [perPage, setPerPage] = useState(pageCount);
@@ -62,7 +62,6 @@ const Card = () => {
 
   const handlePageChange = useCallback(
     (pageIndex: number) => {
-      console.log('change page', pageIndex);
       dispatch(changeResponseValue({ page: pageIndex }));
       setCurrentPage(pageIndex);
     },
@@ -80,9 +79,20 @@ const Card = () => {
 
   const handleSort = (key: string) => {
     setSortKey(key);
+    if (currentPage !== 0) setCurrentPage(0);
+
     if (isSortedDesc !== undefined) {
+      let sortCards;
+      if (sortKey === 'grade') {
+        sortCards = `${isSortedDesc ? 0 : 1}${sortKey}`;
+      } else {
+        sortCards = `${isSortedDesc ? 1 : 0}${sortKey}`;
+      }
+      dispatch(changeResponseValue({ sortCards }));
+
       setIsSortedDesc(!isSortedDesc ? undefined : defaultIsSortedDesc);
     } else {
+      dispatch(changeResponseValue({ sortCards: undefined }));
       setIsSortedDesc(!defaultIsSortedDesc);
     }
   };
@@ -91,21 +101,26 @@ const Card = () => {
     setSearchTerm(e.target.value);
   };
 
-  // on mount + clean up
+  const handleDeleteCard = useCallback(
+    (cardId: string) => {
+      dispatch(deleteCard(id, cardId));
+    },
+    [id, dispatch]
+  );
+
   useEffect(() => {
-    dispatch(getCard(id));
+    dispatch(changeResponseValue({ cardQuestion: search }));
+  }, [dispatch, search]);
 
+  useEffect(() => {
     return () => {
-      console.log('clean up');
-
       dispatch(resetCard());
     };
   }, [dispatch]);
 
-  // on page change or per page change
   useEffect(() => {
     dispatch(getCard(id));
-  }, [dispatch, page, pageCount]);
+  }, [dispatch, page, pageCount, id, sortCards, search]);
 
   if (!isLoggedIn) router.push(RoutesEnum.Login);
 
@@ -180,12 +195,13 @@ const Card = () => {
             >
               Grade
             </Table.TSortableHeadCell>
+            <Table.THeadCell>Actions</Table.THeadCell>
           </Table.THead>
           <Table.TBody>
             {cards ? (
               cards.length !== 0 &&
               cards.map((item) => {
-                return <CardTableItem item={item} key={item._id} />;
+                return <CardTableItem item={item} userId={userId} handleDeleteCard={handleDeleteCard} key={item._id} />;
               })
             ) : (
               <Loader />
