@@ -37,18 +37,15 @@ const slice = createSlice({
   name: 'card-pack',
   initialState,
   reducers: {
-    setStartingMinMax(state, action: PayloadAction<{ min: string; max: string }>) {
-      state.min = action.payload.min;
-      state.max = action.payload.max;
-    },
     setCardPack(state, action: PayloadAction<GetPackResponse>) {
       state.responseData = action.payload;
     },
     changeResponseValue(state, action: PayloadAction<ModelCardPackUpdate>) {
+      console.log(state);
       return { ...state, ...action.payload };
     },
   },
 });
 
 export const cardPackReducer = slice.reducer;
-export const { setStartingMinMax, setCardPack, changeResponseValue } = slice.actions;
+export const { setCardPack, changeResponseValue } = slice.actions;

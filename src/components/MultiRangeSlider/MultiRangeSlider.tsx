@@ -33,8 +33,8 @@ export const MultiRangeSlider: React.FC<propsType> = ({ max, callback }) => {
     callback(minVal, maxVal);
   }, [callback, minVal, maxVal]);
 
-  let leftRightStyle = { left: `${minVal}%`, right: `${(max - maxVal)/max*100}%` };
-  let badgeMinStyle = { left: `calc(${minVal}% + (${0 - minVal * 0.20}px))` };
+  let leftRightStyle = { left: `${minVal/max*100}%`, right: `${(max - maxVal)/max*100}%` };
+  let badgeMinStyle = { left: `calc(${minVal}% + (${0 - minVal * 0.55}px))` };
   let badgeMaxStyle = { left: `calc(${maxVal}% + (${0 - maxVal * 0.55}px))` };
 
   return (
