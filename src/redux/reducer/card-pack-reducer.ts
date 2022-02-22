@@ -18,8 +18,8 @@ export type InitialStateType = {
   ownerCardPack: boolean;
   searchValue: string;
   sortPacks: string;
-  min: string;
-  max: string;
+  min?: string;
+  max?: string;
 };
 
 const initialState: InitialStateType = {
@@ -28,16 +28,16 @@ const initialState: InitialStateType = {
   pageCount: 5,
   ownerCardPack: false,
   searchValue: '',
-  sortPacks: '',
-  min: '0',
-  max: '0',
+  sortPacks: '', 
+  min: '',
+  max: ''
 };
 
 const slice = createSlice({
   name: 'card-pack',
   initialState,
   reducers: {
-    setMinMax(state, action: PayloadAction<{ min: string; max: string }>) {
+    setStartingMinMax(state, action: PayloadAction<{ min: string; max: string }>) {
       state.min = action.payload.min;
       state.max = action.payload.max;
     },
@@ -51,4 +51,4 @@ const slice = createSlice({
 });
 
 export const cardPackReducer = slice.reducer;
-export const { setMinMax, setCardPack, changeResponseValue } = slice.actions;
+export const { setStartingMinMax, setCardPack, changeResponseValue } = slice.actions;

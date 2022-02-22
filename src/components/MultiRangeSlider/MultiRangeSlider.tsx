@@ -1,54 +1,51 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
-import styles from './MultyRangeSlider.module.scss';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import styles from './MultiRangeSlider.module.scss';
 
 type propsType = {
-  min: number;
+
   max: number;
   callback: (selectedMin: number, selectedMax: number) => void;
 };
 
-export const MultiRangeSlider: React.FC<propsType> = ({ min, max, callback }) => {
+export const MultiRangeSlider: React.FC<propsType> = ({ max, callback }) => {
   const [minVal, setMinVal] = useState(0);
-  const [maxVal, setMaxVal] = useState(100);
-
-  const converter = useCallback(
-    (percent: number) => {
-      return Math.floor((max / 100) * percent);
-    },
-    [max]
-  );
+  const [maxVal, setMaxVal] = useState(max);
 
   const changeHandlerMin = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log('min', event.currentTarget.value);
     if (maxVal - 0.1 <= Number(event.currentTarget.value)) {
       setMinVal(Number(maxVal - 0.1));
     } else {
       setMinVal(Number(event.currentTarget.value));
     }
-    callback(converter(minVal), converter(maxVal));
   };
 
   const changeHandlerMax = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log('max', event.currentTarget.value);
     if (Number(event.currentTarget.value) <= minVal + 0.1) {
       setMaxVal(Number(minVal + 0.1));
     } else {
       setMaxVal(Number(event.currentTarget.value));
     }
-    callback(converter(minVal), converter(maxVal));
   };
 
-  let leftRightStyle = { left: `${minVal}%`, right: `${100 - maxVal}%` };
-  let badgeMinStyle = { left: `calc(${minVal}% + (${0 - minVal * 0.2}px))` };
-  let badgeMaxStyle = { left: `calc(${maxVal}% + (${0 - maxVal * 0.2}px))` };
+  useEffect(() => {
+    callback(minVal, maxVal);
+  }, [callback, minVal, maxVal]);
+
+  let leftRightStyle = { left: `${minVal}%`, right: `${(max - maxVal)/max*100}%` };
+  let badgeMinStyle = { left: `calc(${minVal}% + (${0 - minVal * 0.20}px))` };
+  let badgeMaxStyle = { left: `calc(${maxVal}% + (${0 - maxVal * 0.55}px))` };
 
   return (
     <div className={styles.rangeSliderWrapper}>
       <div className={styles.badges}>
         <div className={styles.badgeMin} style={badgeMinStyle}>
-          <div>{min}</div>
+          <div>{minVal}</div>
           <div className={styles.underline} />
         </div>
         <div className={styles.badgeMax} style={badgeMaxStyle}>
-          <div>{max}</div>
+          <div>{maxVal}</div>
           <div className={styles.underline} />
         </div>
       </div>
@@ -59,7 +56,7 @@ export const MultiRangeSlider: React.FC<propsType> = ({ min, max, callback }) =>
         <input
           type="range"
           min={'0'}
-          max={'100'}
+          max={String(max)}
           onChange={changeHandlerMin}
           value={minVal}
           name={'setMinVal'}
@@ -68,7 +65,7 @@ export const MultiRangeSlider: React.FC<propsType> = ({ min, max, callback }) =>
         <input
           type="range"
           min={'0'}
-          max={'100'}
+          max={String(max)}
           onChange={changeHandlerMax}
           value={maxVal}
           name={'setMaxVal'}
